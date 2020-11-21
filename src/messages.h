@@ -12,8 +12,22 @@ enum class MessageType {
   VELOCITY_VECTOR = 4
 };
 
-struct Message {
+struct BinaryMessage {
   MessageType type;
-  std::size_t length;
+  std::size_t payload_length;
   std::uint8_t* payload;
+
+  BinaryMessage(size_t payload_length) 
+    : BinaryMessage(MessageType::ERROR, payload_length, nullptr) { }
+
+  BinaryMessage(MessageType type, std::size_t payload_length, std::uint8_t* payload)
+    : type(type), payload_length(payload_length) {
+    this->payload = malloc(payload_length);
+    if (payload)
+      memcpy(this->payload, payload, payload_length);
+  }
+
+  ~BinaryMessage() {
+    free(payload);
+  }
 };
