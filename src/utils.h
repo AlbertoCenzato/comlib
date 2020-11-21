@@ -13,23 +13,33 @@ constexpr bool isLittleEndian() {
 
 void* reverseMemcpy(void* _restrict dest, const void* _restrict source, size_t len);
 
+void littleEndianCopy(void* from, void* to, size_t len);
+void bigEndianCopy(void* from, void* to, size_t len);
+
 template <class T>
 void copyToBytesLittleEndian(T value, void* dest) {
-  void* value_ptr = reinterpret_cast<void*>(&value);
-  if _constexpr (isLittleEndian())
-    memcpy(dest, value_ptr, sizeof(T));
-  else
-    reverseMemcpy(dest, value_ptr, sizeof(T));
+  littleEndianCopy(dest, reinterpret_cast<void*>(&value), sizeof(T));
 }
 
 template <class T>
 void copyToBytesBigEndian(T value, void* dest) {
-  void* value_ptr = reinterpret_cast<void*>(&value);
-  if _constexpr (isLittleEndian())
-    reverseMemcpy(dest, value_ptr, sizeof(T));
-  else
-    memcpy(dest, value_ptr, sizeof(T));
+  bigEndianCopy(dest, reinterpret_cast<void*>(&value), sizeof(T));
 }
+
+template <class T>
+T copyFromLittleEndianBytes(void* src) {
+  T value;
+  littleEndianCopy(&value, src, sizeof(T));
+  return value;
+}
+
+template <class T>
+T copyFromBigEndianBytes(void* src) {
+  T value;
+  bigEndianCopy(&value, src, sizeof(T));
+  return value;
+}
+
 
 }  // namespace utils
 
