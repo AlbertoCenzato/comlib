@@ -9,25 +9,40 @@ enum class MessageType {
   NACK = 1,
   PING = 2,
   LOG = 3,
-  VELOCITY_VECTOR = 4
+  VELOCITY_VECTOR = 4,
+  BINARY_MESSAGE = 5
 };
 
+
 struct BinaryMessage {
-  MessageType type;
-  std::size_t payload_length;
+  std::size_t payload_length; 
   std::uint8_t* payload;
 
-  BinaryMessage(size_t payload_length) 
-    : BinaryMessage(MessageType::ERROR, payload_length, nullptr) { }
-
-  BinaryMessage(MessageType type, std::size_t payload_length, std::uint8_t* payload)
-    : type(type), payload_length(payload_length) {
+  void mallocAndSet(std::size_t payload_length, const std::uint8_t* payload) {
+    this->payload_length = payload_length;
+    freeMemory();
     this->payload = reinterpret_cast<std::uint8_t*>(malloc(payload_length));
-    if (payload)
-      memcpy(this->payload, payload, payload_length);
+    memcpy(this->payload, payload, payload_length);
   }
 
-  ~BinaryMessage() {
-    free(payload);
+  void freeMemory() {
+    if (payload)
+      free(payload);
+    payload = nullptr;
+  }
+};
+
+struct Message {
+  MessageType type;
+  union {
+    BinaryMessage binary;
+  } message;
+
+  static Message buildEmptyMessage() {
+    Message m;
+    m.type = MessageType::BINARY_MESSAGE;
+    m.message.binary.payload_length = 0;
+    m.message.binary.payload = nullptr;
+    return m;
   }
 };
