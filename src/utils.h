@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstring>
+#include <cinttypes>
 #include "macros.h"
 
 namespace com {
@@ -38,6 +39,16 @@ T copyFromBigEndianBytes(void* src) {
   T value;
   bigEndianCopy(&value, src, sizeof(T));
   return value;
+}
+
+template <class T>
+std::uint8_t* toUBytesArray(T& value) {
+  return reinterpret_cast<std::uint8_t*>(&value);
+}
+
+template <class T>
+T fromUBytesArray(std::uint8_t* data) {
+  return *reinterpret_cast<T*>(data);
 }
 
 
