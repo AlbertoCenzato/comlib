@@ -22,7 +22,7 @@ struct BinaryMessage {
 
   BinaryMessage(MessageType type, std::size_t payload_length, std::uint8_t* payload)
     : type(type), payload_length(payload_length) {
-    this->payload = malloc(payload_length);
+    this->payload = reinterpret_cast<std::uint8_t*>(malloc(payload_length));
     if (payload)
       memcpy(this->payload, payload, payload_length);
   }

@@ -1,6 +1,6 @@
 #include "communication_interface.h"
 #include "utils.h"
-
+#include <chrono>
 
 namespace com {
 
@@ -8,7 +8,7 @@ template <size_t BUFFER_SIZE=256>
 class MessageConveyor
 {
 public:
-  MessageConveyor(IMessageSocket* socket) : socket(socket), buffer({0}) { }
+  MessageConveyor(IMessageSocket* socket) : socket(socket) { }
   ~MessageConveyor() = default;
 
   bool connect() { return socket->connect(); }
@@ -22,7 +22,7 @@ public:
     data_buffer += sizeof(std::int32_t);
     utils::copyToBytesLittleEndian(message.payload_length, data_buffer);
     data_buffer += sizeof(message.payload_length);
-    memcpy(data_buffer, message.payload);
+    memcpy(data_buffer, message.payload, message.payload_length);
 
     return socket->send(buffer, message_length);
   }
