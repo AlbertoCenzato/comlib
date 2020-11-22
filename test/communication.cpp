@@ -10,12 +10,16 @@ TEST(MessageConveyor, sendReceive) {
   MessageConveyor<256> converyor{ &socket };
 
   std::uint64_t payload = 0x0123456789ABCDEF;
-  BinaryMessage message{ MessageType::LOG, sizeof(payload), utils::toUBytesArray(payload) };
+  BinaryMessage message{ sizeof(payload), utils::toUBytesArray(payload) };
   converyor.send(message);
 
-  BinaryMessage reply = converyor.receive();
+  Message reply = Message::buildEmptyMessage();
+  converyor.receive(reply);
 
-  EXPECT_EQ(reply.type, message.type);
-  EXPECT_EQ(reply.payload_length, message.payload_length);
-  EXPECT_EQ(utils::fromUBytesArray<std::uint64_t>(reply.payload), payload);
+  EXPECT_EQ(reply.type, MessageType::BINARY_MESSAGE);
+  EXPECT_EQ(reply.message.binary.payload_length, message.payload_length);
+  EXPECT_EQ(utils::fromUBytesArray<std::uint64_t>(reply.message.binary.payload), payload);
+
+  if (reply.type == MessageType::BINARY_MESSAGE)
+    reply.message.binary.freeMemory();
 }
