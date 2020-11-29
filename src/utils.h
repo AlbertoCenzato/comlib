@@ -2,6 +2,9 @@
 
 #include <cstring>
 #include <cinttypes>
+#include <functional>
+#include <chrono>
+#include <iostream>
 #include "macros.h"
 
 namespace com {
@@ -57,6 +60,7 @@ T fromUBytesArray(const std::uint8_t* data) {
   return *reinterpret_cast<const T*>(data);
 }
 
+void profileTime(const char* name, std::function<void()> func);
 
 }  // namespace utils
 
