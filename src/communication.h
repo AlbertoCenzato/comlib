@@ -72,7 +72,18 @@ public:
   }
 
   std::chrono::microseconds ping() {
-    return 0;
+    auto start = std::chrono::steady_clock::now();
+    
+    bool success = send(EmptyMessage{});
+    if (!success)
+      return std::chrono::microseconds{-1};
+    Message reply;
+    receive(reply);
+    if (reply.type != MessageType::EMPTY_MESSAGE)
+      return std::chrono::microseconds{ -1 };
+
+    auto end = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::microseconds>(end - start);
   }
 
 private:

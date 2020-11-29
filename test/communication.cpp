@@ -39,3 +39,13 @@ TEST(MessageConveyor, sendReceiveMove) {
   EXPECT_EQ(reply.message.move.y, 0.f);
   EXPECT_EQ(reply.message.move.rot, 0.5f);
 }
+
+
+TEST(MessageConveyor, sendReceivePing) {
+  MockMessageSocket socket;
+  MessageConveyor<265> conveyor{ &socket };
+
+  std::chrono::microseconds us_elapsed = conveyor.ping();
+  std::cout << "RTT: " << us_elapsed.count() / 1000.0 << "ms" << std::endl;
+  EXPECT_NE(us_elapsed.count(), -1);
+}
