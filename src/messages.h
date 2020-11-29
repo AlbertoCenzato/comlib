@@ -42,14 +42,19 @@ struct MoveMessage {
   float rot;
 };
 
+struct EmptyMessage {
+  static const MessageType type = MessageType::EMPTY_MESSAGE;
+};
+
 struct Message {
   MessageType type;
   union {
     BinaryMessage binary;
     MoveMessage move;
+    EmptyMessage empty;
   } message;
 
-  static Message buildEmptyMessage() {
+  static Message buildEmptyMessage() {  // TODO (cenz): rename
     Message m;
     m.type = MessageType::BINARY_MESSAGE;
     m.message.binary.payload_length = 0;
