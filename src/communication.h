@@ -56,6 +56,14 @@ public:
     return socket->send(buffer, message_length);
   }
 
+  bool send(const EmptyMessage& message) {
+    std::uint8_t* data_buffer = buffer;
+    data_buffer = internal::serialize(message.type, buffer);
+
+    size_t message_length = sizeof(std::int16_t);
+    return socket->send(buffer, message_length);
+  }
+
   void receive(Message& message) {
     size_t message_length = socket->receive(buffer);
     MessageType type;
