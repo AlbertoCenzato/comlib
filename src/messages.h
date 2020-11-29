@@ -7,10 +7,10 @@ enum class MessageType {
   ERROR = -1,
   ACK = 0,
   NACK = 1,
-  PING = 2,
-  LOG = 3,
-  MOVE_MESSAGE = 4,
-  BINARY_MESSAGE = 5
+  LOG = 2,
+  MOVE_MESSAGE = 3,
+  BINARY_MESSAGE = 4,
+  EMPTY_MESSAGE = 5
 };
 
 
