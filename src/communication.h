@@ -1,3 +1,5 @@
+#pragma once
+
 #include "communication_interface.h"
 #include "utils.h"
 #include <chrono>
