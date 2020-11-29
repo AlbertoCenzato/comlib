@@ -9,12 +9,14 @@ enum class MessageType {
   NACK = 1,
   PING = 2,
   LOG = 3,
-  VELOCITY_VECTOR = 4,
+  MOVE_MESSAGE = 4,
   BINARY_MESSAGE = 5
 };
 
 
 struct BinaryMessage {
+  static const MessageType type = MessageType::BINARY_MESSAGE;
+
   std::size_t payload_length; 
   std::uint8_t* payload;
 
@@ -32,10 +34,19 @@ struct BinaryMessage {
   }
 };
 
+struct MoveMessage {
+  static const MessageType type = MessageType::MOVE_MESSAGE;
+
+  float x;
+  float y;
+  float rot;
+};
+
 struct Message {
   MessageType type;
   union {
     BinaryMessage binary;
+    MoveMessage move;
   } message;
 
   static Message buildEmptyMessage() {

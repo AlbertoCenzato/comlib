@@ -25,11 +25,26 @@ public:
     size_t message_length = sizeof(std::int16_t) + sizeof(message.payload_length) + message.payload_length;
     
     std::uint8_t* data_buffer = buffer;
-    utils::copyToBytesLittleEndian(static_cast<std::int16_t>(MessageType::BINARY_MESSAGE), data_buffer);
+    utils::copyToBytesLittleEndian(static_cast<std::int16_t>(message.type), data_buffer);
     data_buffer += sizeof(std::int16_t);
     utils::copyToBytesLittleEndian(message.payload_length, data_buffer);
     data_buffer += sizeof(message.payload_length);
     memcpy(data_buffer, message.payload, message.payload_length);
+
+    return socket->send(buffer, message_length);
+  }
+  
+  bool send(const MoveMessage& message) {
+    size_t message_length = sizeof(std::int16_t) + sizeof(message);
+
+    std::uint8_t* data_buffer = buffer;
+    utils::copyToBytesLittleEndian(static_cast<std::int16_t>(message.type), data_buffer);
+    data_buffer += sizeof(std::int16_t);
+    memcpy(data_buffer, &message.x, sizeof(message.x));
+    data_buffer += sizeof(message.x);
+    memcpy(data_buffer, &message.y, sizeof(message.y));
+    data_buffer += sizeof(message.y);
+    memcpy(data_buffer, &message.rot, sizeof(message.rot));
 
     return socket->send(buffer, message_length);
   }

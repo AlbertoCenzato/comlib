@@ -35,7 +35,7 @@ inline std::string to_string(MessageType message_type)
   case MessageType::NACK:  return "NACK";
   case MessageType::PING:  return "PING";
   case MessageType::LOG:   return "LOG";
-  case MessageType::VELOCITY_VECTOR: return "VELOCITY_VECTOR";
+  case MessageType::MOVE_MESSAGE: return "MOVE_MESSAGE";
   }
 
   return "UNKNOWN_VALUE";
