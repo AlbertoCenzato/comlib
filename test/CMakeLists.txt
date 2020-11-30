@@ -12,6 +12,6 @@ include_directories (../src ${GTEST_INCLUDE_DIRS})
 file (GLOB_RECURSE TEST_SRC *.cpp)
 
 add_executable (comlib_unit_tests ${TEST_SRC})
-target_link_libraries(comlib_unit_tests PRIVATE comlib GTest::gtest GTest::gtest_main)
+target_link_libraries(comlib_unit_tests PRIVATE comlib ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES}) #GTest::gtest GTest::gtest_main)
 
 gtest_add_tests(TARGET comlib_unit_tests)
