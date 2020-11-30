@@ -19,5 +19,6 @@
 #elif ARDUINO_AVR_UNO
 #define LITTLE_ENDIAN true
 #else 
+#undef LITTLE_ENDIAN  // TODO(cenz): fix this
 #define LITTLE_ENDIAN true
 #endif
