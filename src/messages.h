@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstddef>
-#include <cstring>
 
 namespace com {
 
@@ -18,27 +16,17 @@ enum class MessageType {
 
 
 struct BinaryMessage {
-  static const MessageType type = MessageType::BINARY_MESSAGE;
+  static const MessageType type;
 
   std::uint32_t payload_length;
   std::uint8_t* payload;
 
-  void mallocAndSet(std::uint32_t payload_length, const std::uint8_t* payload) {
-    this->payload_length = payload_length;
-    freeMemory();
-    this->payload = reinterpret_cast<std::uint8_t*>(malloc(payload_length));
-    std::memcpy(this->payload, payload, payload_length);
-  }
-
-  void freeMemory() {
-    if (payload)
-      free(payload);
-    payload = nullptr;
-  }
+  void mallocAndSet(std::uint32_t payload_length, const std::uint8_t* payload);
+  void freeMemory();
 };
 
 struct MoveMessage {
-  static const MessageType type = MessageType::MOVE_MESSAGE;
+  static const MessageType type;
 
   float x;
   float y;
@@ -46,7 +34,7 @@ struct MoveMessage {
 };
 
 struct EmptyMessage {
-  static const MessageType type = MessageType::EMPTY_MESSAGE;
+  static const MessageType type;
 };
 
 struct Message {
@@ -57,13 +45,7 @@ struct Message {
     EmptyMessage empty;
   } message;
 
-  static Message buildEmptyMessage() {  // TODO (cenz): rename
-    Message m;
-    m.type = MessageType::BINARY_MESSAGE;
-    m.message.binary.payload_length = 0;
-    m.message.binary.payload = nullptr;
-    return m;
-  }
+  static Message buildEmptyMessage();  // TODO(cenz): rename
 };
 
 }
