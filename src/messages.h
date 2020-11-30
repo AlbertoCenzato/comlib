@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstring>
 
+namespace com {
+
 enum class MessageType {
   ERROR = -1,
   ACK = 0,
@@ -18,7 +20,7 @@ enum class MessageType {
 struct BinaryMessage {
   static const MessageType type = MessageType::BINARY_MESSAGE;
 
-  std::uint32_t payload_length; 
+  std::uint32_t payload_length;
   std::uint8_t* payload;
 
   void mallocAndSet(std::uint32_t payload_length, const std::uint8_t* payload) {
@@ -63,3 +65,5 @@ struct Message {
     return m;
   }
 };
+
+}
