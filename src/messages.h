@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <cstring>
 
 enum class MessageType {
   ERROR = -1,
@@ -24,7 +25,7 @@ struct BinaryMessage {
     this->payload_length = payload_length;
     freeMemory();
     this->payload = reinterpret_cast<std::uint8_t*>(malloc(payload_length));
-    memcpy(this->payload, payload, payload_length);
+    std::memcpy(this->payload, payload, payload_length);
   }
 
   void freeMemory() {
