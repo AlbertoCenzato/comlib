@@ -6,10 +6,10 @@
 #include <numeric>
 #include <iostream>
 
-using Buffer = std::array<std::uint8_t, 1024>;
+using Buffer = std::queue<std::uint8_t>;
 
-void send(Buffer* send_buffer, Buffer* receive_buffer, const std::vector<int>& data);
-void receive(Buffer* send_buffer, Buffer* receive_buffer, std::vector<int>& data);
+void send(Buffer* send_queue, Buffer* receive_queue, const std::vector<int>& data);
+void receive(Buffer* send_queue, Buffer* receive_queue, std::vector<int>& data);
 
 int main() {
   std::vector<int> send_queue, receive_queue;
@@ -33,8 +33,8 @@ int main() {
   return 0;
 }
 
-void send(Buffer* send_buffer, Buffer* receive_buffer, const std::vector<int>& data) {
-  com::test::MockMessageSocket socket{ send_buffer, receive_buffer };
+void send(Buffer* send_queue, Buffer* receive_queue, const std::vector<int>& data) {
+  com::test::MockMessageSocket socket{ send_queue, receive_queue };
   com::MessageConveyor conveyor{ &socket };
 
   conveyor.connect();
@@ -55,8 +55,8 @@ void send(Buffer* send_buffer, Buffer* receive_buffer, const std::vector<int>& d
   conveyor.disconnect();
 }
 
-void receive(Buffer* send_buffer, Buffer* receive_buffer, std::vector<int>& data) {
-  com::test::MockMessageSocket socket{ send_buffer, receive_buffer };
+void receive(Buffer* send_queue, Buffer* receive_queue, std::vector<int>& data) {
+  com::test::MockMessageSocket socket{ send_queue, receive_queue };
   com::MessageConveyor conveyor{ &socket };
 
   conveyor.connect();

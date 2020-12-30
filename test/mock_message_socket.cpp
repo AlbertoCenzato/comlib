@@ -4,24 +4,12 @@
 namespace com::test {
 
 MockMessageSocket::MockMessageSocket(
-  std::array<std::uint8_t, 1024>* send_buffer,
-  std::array<std::uint8_t, 1024>* receive_buffer) 
+  std::queue<std::uint8_t>* send_queue,
+  std::queue<std::uint8_t>* receive_queue) 
   : is_connected(false), 
-    send_buffer(send_buffer), 
-    receive_buffer(receive_buffer), 
-    alloc_send(send_buffer==nullptr), 
-    alloc_receive(receive_buffer==nullptr) {
-  if (alloc_send)
-    send_buffer = new std::array<std::uint8_t, 1024>();
-  if (alloc_receive)
-    receive_buffer = new std::array<std::uint8_t, 1024>();
-}
-
-MockMessageSocket::~MockMessageSocket() {
-  if (alloc_send)
-    delete send_buffer;
-  if (alloc_receive)
-    delete receive_buffer;
+    send_queue(send_queue), 
+    receive_queue(receive_queue)
+{
 }
 
 bool MockMessageSocket::connect() {
@@ -36,18 +24,21 @@ void MockMessageSocket::disconnect() {
 }
 
 bool MockMessageSocket::send(const void* data, std::size_t bytes) {
-  if (bytes > send_buffer->size())
-    return false;
-
-  utils::copyToLittleEndian(bytes, send_buffer->data());
-  memcpy(send_buffer->data() + sizeof(bytes), data, bytes);
+  auto data_ptr = reinterpret_cast<const std::uint8_t*>(data);
+  for (std::size_t i = 0; i < bytes; ++i) {
+    send_queue->push(data_ptr[i]);
+  }
   return true;
 }
 
 std::size_t MockMessageSocket::receive(void* data) {
-  std::size_t length = utils::copyFromLittleEndian<std::size_t>(receive_buffer->data());
-  memcpy(data, receive_buffer->data() + sizeof(length), length);
-  return length;
+  size_t data_length = receive_queue->size();
+  auto data_ptr = reinterpret_cast<std::uint8_t*>(data);
+  for (size_t i = 0; i < data_length; ++i) {
+    data_ptr[i] = receive_queue->front();
+    receive_queue->pop();
+  }
+  return data_length;
 }
 
 }
