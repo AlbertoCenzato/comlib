@@ -1,10 +1,12 @@
 #pragma once
 
 #include "communication_interface.h"
+#include "stream_message_reader.h"
 #include "utils.h"
 #include <chrono>
 #include <map>
 #include <vector>
+#include <optional>
 
 namespace com {
 
@@ -60,6 +62,31 @@ public:
     MessageType type;
     const std::uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
     internal::fillMessage(message, type, data_buffer);
+  }
+
+  std::optional<Message> processIncomingMessage() {
+    // TODO(cenz): return ptr to actual message begin position in the buffer?
+    // TODO(cenz): find a better name for this function
+    bool is_complete_message = stream_reader.processIncomingBytes(*socket, receive_buffer);
+    if (!is_complete_message)
+      return {};
+
+    const std::uint8_t* message_begin = receive_buffer + sizeof(size_t);
+    Message message;
+    bufferToMessage(message_begin, message);
+    return message;
+    // TODO(cenz): dispatch message with the correct type
+    //auto& callbacks = callback_registry[message.type];
+    //for (auto& callback : callbacks) {
+    //  callback(message);
+    //}
+  }
+
+  // TODO(cenz): implementation
+  void bufferToMessage(const std::uint8_t* buffer, Message& message) {
+    MessageType type;
+    buffer = utils::deserialize(buffer, type);
+    internal::fillMessage(message, type, buffer);
   }
 
 
