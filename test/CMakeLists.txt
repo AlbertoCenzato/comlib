@@ -14,6 +14,8 @@ set (UNIT_TEST_SRC
 	communication.cpp
 	utils.cpp
 	mock_message_socket.cpp
+	loopback_mock_message_socket.cpp
+	stream_message_reader.cpp
 )
 
 add_executable (comlib_unit_tests ${UNIT_TEST_SRC})
@@ -25,6 +27,7 @@ gtest_add_tests(TARGET comlib_unit_tests)
 set (INTEGRATION_TEST_SRC
 	integration_tests_main.cpp
 	mock_message_socket.cpp
+	loopback_mock_message_socket.cpp
 )
 
 add_executable (comlib_integration_tests ${INTEGRATION_TEST_SRC})
