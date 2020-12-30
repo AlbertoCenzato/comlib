@@ -9,7 +9,12 @@ endif (MSVC)
 
 include_directories (../src ${GTEST_INCLUDE_DIRS})
 
-file (GLOB_RECURSE TEST_SRC *.cpp)
+# Unit tests
+set (TEST_SRC
+	unit_tests_main.cpp
+	communication.cpp
+	utils.cpp
+)
 
 add_executable (comlib_unit_tests ${TEST_SRC})
 target_link_libraries(comlib_unit_tests PRIVATE comlib ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${SYSTEM_DEPENDENT_LIBS}) #GTest::gtest GTest::gtest_main)
