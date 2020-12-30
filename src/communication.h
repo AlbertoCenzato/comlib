@@ -3,6 +3,8 @@
 #include "communication_interface.h"
 #include "utils.h"
 #include <chrono>
+#include <map>
+#include <vector>
 
 namespace com {
 
@@ -60,6 +62,13 @@ public:
     internal::fillMessage(message, type, data_buffer);
   }
 
+
+  /*
+  void registerCallback(MessageType type, Callback callback) {
+    callback_registry[type].push_back(callback);
+  }
+  */
+
   std::chrono::microseconds ping() {
     auto start = std::chrono::steady_clock::now();
     
@@ -78,7 +87,10 @@ public:
 private:
   std::uint8_t send_buffer[BUFFER_SIZE];
   std::uint8_t receive_buffer[BUFFER_SIZE];
+
   IMessageSocket* socket;  
+  StreamMessageReader stream_reader;
+  //std::map<MessageType, std::vector<Callback>> callback_registry;
 };
 
 
