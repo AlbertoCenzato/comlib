@@ -20,3 +20,7 @@ add_executable (comlib_unit_tests ${TEST_SRC})
 target_link_libraries(comlib_unit_tests PRIVATE comlib ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${SYSTEM_DEPENDENT_LIBS}) #GTest::gtest GTest::gtest_main)
 
 gtest_add_tests(TARGET comlib_unit_tests)
+
+# Integration tests
+add_executable (comlib_integration_tests integration_tests_main.cpp)
+target_link_libraries(comlib_integration_tests PRIVATE comlib ${SYSTEM_DEPENDENT_LIBS})
