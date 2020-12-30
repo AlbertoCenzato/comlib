@@ -74,6 +74,9 @@ T fromUBytesArray(const std::uint8_t* data) {
 
 void profileTime(const char* name, std::function<void()> func);
 
+void shiftBytesLeft(std::uint8_t* array, size_t length, size_t shift);
+void shiftBytesRight(std::uint8_t* array, size_t length, size_t shift);
+
 }  // namespace utils
 
 }  // namespace com

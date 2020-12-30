@@ -63,11 +63,11 @@ const std::uint8_t* deserialize<MessageType>(const std::uint8_t* data, MessageTy
 }
 
 
-void shiftBytesLeft(void* array, size_t length, size_t shift) {
-//  memmove(array - shift, array, length);
+void shiftBytesLeft(std::uint8_t* array, size_t length, size_t shift) {
+  memmove(array - shift, array, length);
 }
-void shiftBytesRight(void* array, size_t length, size_t shift) {
-//  memmove(array + shift, array, length);
+void shiftBytesRight(std::uint8_t* array, size_t length, size_t shift) {
+  memmove(array + shift, array, length);
 }
 
 
