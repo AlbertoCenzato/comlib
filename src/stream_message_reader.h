@@ -23,10 +23,13 @@ private:
   std::uint32_t bytes_received;  // amount of data actually received 
   std::size_t message_length;    // length of the message currently processed
   std::uint32_t message_bytes_to_process;
+  
+  bool processData(std::uint8_t* buffer);
+  bool seek(const std::uint8_t* buffer);
+  bool parseMessage(const std::uint8_t* buffer);
 
   // TODO(cenz): find a better name
   void compactBuffer(std::uint8_t* buffer);
-  const std::uint8_t* readLengthAndAdvance(const std::uint8_t* data, std::size_t& value);
 };
 
 
