@@ -34,7 +34,7 @@ int main() {
 }
 
 void send(Buffer* send_buffer, Buffer* receive_buffer, const std::vector<int>& data) {
-  com::MockMessageSocket socket{ send_buffer, receive_buffer };
+  com::test::MockMessageSocket socket{ send_buffer, receive_buffer };
   com::MessageConveyor conveyor{ &socket };
 
   conveyor.connect();
@@ -56,7 +56,7 @@ void send(Buffer* send_buffer, Buffer* receive_buffer, const std::vector<int>& d
 }
 
 void receive(Buffer* send_buffer, Buffer* receive_buffer, std::vector<int>& data) {
-  com::MockMessageSocket socket{ send_buffer, receive_buffer };
+  com::test::MockMessageSocket socket{ send_buffer, receive_buffer };
   com::MessageConveyor conveyor{ &socket };
 
   conveyor.connect();

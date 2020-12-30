@@ -1,7 +1,7 @@
 #include "mock_message_socket.h"
 #include "utils.h"
 
-namespace com {
+namespace com::test {
 
 MockMessageSocket::MockMessageSocket(
   std::array<std::uint8_t, 1024>* send_buffer,

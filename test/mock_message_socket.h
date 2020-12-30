@@ -3,7 +3,7 @@
 #include "communication_interface.h"
 #include <array>
 
-namespace com {
+namespace com::test {
 
 class MockMessageSocket : public IMessageSocket 
 {

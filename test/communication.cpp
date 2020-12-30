@@ -6,7 +6,7 @@
 using namespace com;
 
 TEST(MessageConveyor, sendReceiveBinary) {
-  MockMessageSocket socket;
+  test::MockMessageSocket socket;
   MessageConveyor<256> converyor{ &socket };
 
   std::uint64_t payload = 0x0123456789ABCDEF;
@@ -25,7 +25,7 @@ TEST(MessageConveyor, sendReceiveBinary) {
 }
 
 TEST(MessageConveyor, sendReceiveMove) {
-  MockMessageSocket socket;
+  test::MockMessageSocket socket;
   MessageConveyor<265> conveyor{ &socket };
 
   MoveMessage message{ 1.f, 0.f, 0.5f };
@@ -42,7 +42,7 @@ TEST(MessageConveyor, sendReceiveMove) {
 
 
 TEST(MessageConveyor, sendReceivePing) {
-  MockMessageSocket socket;
+  test::MockMessageSocket socket;
   MessageConveyor<265> conveyor{ &socket };
 
   std::chrono::microseconds us_elapsed = conveyor.ping();
