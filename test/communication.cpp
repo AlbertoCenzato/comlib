@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
+#include "mock_message_socket.h"
 
 #include <communication.h>
-#include <mock_message_socket.h>
+#include <gtest/gtest.h>
 
 using namespace com;
 
