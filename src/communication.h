@@ -22,8 +22,9 @@ class MessageConveyor
 {
 public:
   using Callback = void(*)(const Message&);
+
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
-  ~MessageConveyor() = default;
+  ~MessageConveyor() = default;  // TODO(cenz): disconnect on destruction
 
   bool connect() { return socket->connect(); }
   void disconnect() { return socket->disconnect(); }
@@ -58,8 +59,8 @@ public:
   }
 
   void receive(Message& message) {
-    size_t message_length = socket->receive(receive_buffer);
     MessageType type;
+    size_t message_length = socket->receive(receive_buffer);
     const std::uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
     internal::fillMessage(message, type, data_buffer);
   }
