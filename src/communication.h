@@ -17,6 +17,7 @@ template <size_t BUFFER_SIZE=256>
 class MessageConveyor
 {
 public:
+  using Callback = void(*)(const Message&);
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
   ~MessageConveyor() = default;
 
