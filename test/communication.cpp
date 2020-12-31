@@ -1,4 +1,4 @@
-#include "loopback_mock_message_socket.h"
+#include "mock_message_socket.h"
 
 #include <communication.h>
 #include <gtest/gtest.h>
