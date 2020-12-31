@@ -8,26 +8,32 @@ endif (MSVC)
 
 include_directories (. ../src ${GTEST_INCLUDE_DIRS})
 
+# Mocks
+set (MOCKS_SRC
+	mocks/mock_message_socket.cpp
+)
+
+add_library (mocks ${MOCKS_SRC})
+target_link_libraries (mocks PRIVATE comlib ${SYSTEM_DEPENDENT_LIBS})
+
 # Unit tests
 set (UNIT_TEST_SRC
 	unit_tests_main.cpp
 	communication.cpp
 	utils.cpp
-	mock_message_socket.cpp
 	mock_message_socket_test.cpp
 	stream_message_reader.cpp
 )
 
 add_executable (comlib_unit_tests ${UNIT_TEST_SRC})
-target_link_libraries(comlib_unit_tests PRIVATE comlib ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${SYSTEM_DEPENDENT_LIBS}) #GTest::gtest GTest::gtest_main)
+target_link_libraries(comlib_unit_tests PRIVATE comlib mocks ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${SYSTEM_DEPENDENT_LIBS}) #GTest::gtest GTest::gtest_main)
 
 gtest_add_tests(TARGET comlib_unit_tests)
 
 # Integration tests
 set (INTEGRATION_TEST_SRC
 	integration_tests_main.cpp
-	mock_message_socket.cpp
 )
 
 add_executable (comlib_integration_tests ${INTEGRATION_TEST_SRC})
-target_link_libraries(comlib_integration_tests PRIVATE comlib ${SYSTEM_DEPENDENT_LIBS})
+target_link_libraries(comlib_integration_tests PRIVATE comlib mocks ${SYSTEM_DEPENDENT_LIBS})

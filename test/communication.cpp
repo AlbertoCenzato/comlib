@@ -1,4 +1,4 @@
-#include "mock_message_socket.h"
+#include "mocks/mock_message_socket.h"
 
 #include <communication.h>
 #include <gtest/gtest.h>
