@@ -49,3 +49,21 @@ TEST(MockMessageSocket, receive) {
   EXPECT_EQ(value, retrieved_value);
 }
 
+TEST(LoopbackMockMessageSocket, connect) {
+  LoopbackMockMessageSocket socket{};
+  EXPECT_TRUE(socket.connect());
+}
+
+TEST(LoopbackMockMessageSocket, sendReceive) {
+  LoopbackMockMessageSocket socket{};
+
+  uint64_t value = 0x0123456789ABCDEF;
+  socket.send(&value, sizeof(value));
+
+  uint8_t tmp[sizeof(value)];
+  size_t bytes_received = socket.receive(tmp);
+  EXPECT_EQ(bytes_received, sizeof(value));
+  uint64_t received_value = com::utils::copyFromLittleEndian<uint64_t>(tmp);
+  EXPECT_EQ(value, received_value);
+
+}
