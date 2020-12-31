@@ -21,7 +21,7 @@ set (UNIT_TEST_SRC
 	unit_tests/unit_tests_main.cpp
 	unit_tests/communication.cpp
 	unit_tests/utils.cpp
-	unit_tests/mock_message_socket_test.cpp
+	unit_tests/mock_message_socket.cpp
 	unit_tests/stream_message_reader.cpp
 )
 
@@ -32,7 +32,7 @@ gtest_add_tests(TARGET comlib_unit_tests)
 
 # Integration tests
 set (INTEGRATION_TEST_SRC
-	integration_tests_main.cpp
+	integration_tests/integration_tests_main.cpp
 )
 
 add_executable (comlib_integration_tests ${INTEGRATION_TEST_SRC})
