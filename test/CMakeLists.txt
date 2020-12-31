@@ -18,11 +18,11 @@ target_link_libraries (mocks PRIVATE comlib ${SYSTEM_DEPENDENT_LIBS})
 
 # Unit tests
 set (UNIT_TEST_SRC
-	unit_tests_main.cpp
-	communication.cpp
-	utils.cpp
-	mock_message_socket_test.cpp
-	stream_message_reader.cpp
+	unit_tests/unit_tests_main.cpp
+	unit_tests/communication.cpp
+	unit_tests/utils.cpp
+	unit_tests/mock_message_socket_test.cpp
+	unit_tests/stream_message_reader.cpp
 )
 
 add_executable (comlib_unit_tests ${UNIT_TEST_SRC})
