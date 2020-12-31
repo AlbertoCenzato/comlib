@@ -2,6 +2,16 @@
 
 namespace com {
 
+StreamMessageReader::StreamMessageReader()
+  : status(Status::SEEK), 
+    parsing_offset(0), 
+    bytes_received(0), 
+    message_length(0), 
+    message_bytes_to_process(0)
+{
+
+}
+
 bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, std::uint8_t* buffer) {
   size_t new_bytes = socket.receive(buffer + bytes_received);
   if (new_bytes <= 0)

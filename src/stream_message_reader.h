@@ -7,7 +7,7 @@ namespace com {
 
 class StreamMessageReader {
 public:
-  StreamMessageReader() = default;
+  StreamMessageReader();
   ~StreamMessageReader() = default;
 
   bool processIncomingBytes(IMessageSocket& socket, std::uint8_t* buffer);
