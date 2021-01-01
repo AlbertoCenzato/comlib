@@ -62,8 +62,8 @@ bool StreamMessageReader::parseMessage(const std::uint8_t* buffer) {
   if (message_length > bytes_received - parsing_offset)  
     return false;  // we have to wait for another chunk of data
   
-  bytes_received -= static_cast<uint32_t>(parsing_offset + message_length);  // remove message length + payload from bytes received
-  parsing_offset += static_cast<uint32_t>(message_length);  // advance parsing_offset to skip already validated message
+  bytes_received -= (parsing_offset + message_length);  // remove message length + payload from bytes received
+  parsing_offset += message_length;  // advance parsing_offset to skip already validated message
   message_length = 0;
   return true;
 }

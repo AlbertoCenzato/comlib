@@ -30,40 +30,41 @@ public:
   void disconnect() { return socket->disconnect(); }
 
   bool send(const BinaryMessage& message) {
-    std::uint8_t* data_buffer = send_buffer;
-    data_buffer = utils::serialize(message.type, send_buffer);
+    uint32_t message_length = sizeof(std::int16_t) + sizeof(message.payload_length) + message.payload_length;
+    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
+    data_buffer = utils::serialize(message.type, data_buffer);
     data_buffer = utils::serialize(message.payload_length, data_buffer);
     memcpy(data_buffer, message.payload, message.payload_length);
 
-    size_t message_length = sizeof(std::int16_t) + sizeof(message.payload_length) + message.payload_length;
-    return socket->send(send_buffer, message_length);
+    return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
   
   bool send(const MoveMessage& message) {
-    std::uint8_t* data_buffer = send_buffer;
+    uint32_t message_length = sizeof(std::int16_t) + sizeof(message);
+
+    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
     data_buffer = utils::serialize(message.type, send_buffer);
     data_buffer = utils::serialize(message.x, data_buffer);
     data_buffer = utils::serialize(message.y, data_buffer);
     data_buffer = utils::serialize(message.rot, data_buffer);
 
-    size_t message_length = sizeof(std::int16_t) + sizeof(message);
-    return socket->send(send_buffer, message_length);
+    return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
   bool send(const EmptyMessage& message) {
-    std::uint8_t* data_buffer = send_buffer;
+    uint32_t message_length = sizeof(std::int16_t);
+    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
     data_buffer = utils::serialize(message.type, send_buffer);
 
-    size_t message_length = sizeof(std::int16_t);
-    return socket->send(send_buffer, message_length);
+    return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
-  void receive(Message& message) {
-    MessageType type;
-    size_t message_length = socket->receive(receive_buffer);
-    const std::uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
-    internal::fillMessage(message, type, data_buffer);
-  }
+  //void receive(Message& message) {
+  //  MessageType type;
+  //  size_t message_length = socket->receive(receive_buffer);
+  //  const std::uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
+  //  internal::fillMessage(message, type, data_buffer);
+  //}
 
   std::optional<Message> processIncomingMessage() {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
@@ -96,7 +97,7 @@ public:
   }
   */
 
-  std::chrono::microseconds ping() {
+  /*std::chrono::microseconds ping() {
     auto start = std::chrono::steady_clock::now();
     
     bool success = send(EmptyMessage{});
@@ -109,7 +110,7 @@ public:
 
     auto end = std::chrono::steady_clock::now();
     return std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-  }
+  }*/
 
 private:
   std::uint8_t send_buffer[BUFFER_SIZE];

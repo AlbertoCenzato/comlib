@@ -24,7 +24,7 @@ private:
 
   // TODO(cenz): it's not a good idea that the StreamMessageReader should know the number of bytes 
   // occupied by the message length, since it is decided by MessageConveyor and it is a hidden dependency
-  std::size_t message_length;    // length of the message currently processed
+  uint32_t message_length;    // length of the message currently processed
   bool buffer_should_be_compacted;
 
 
