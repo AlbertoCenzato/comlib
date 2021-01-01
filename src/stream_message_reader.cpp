@@ -18,11 +18,11 @@ bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, std::uint
     buffer_should_be_compacted = false;
   }
 
-  size_t new_bytes = socket.receive(buffer + bytes_received);
+  uint32_t new_bytes = socket.receive(buffer + bytes_received);
   if (new_bytes <= 0)
     return false;
 
-  bytes_received += static_cast<std::uint32_t>(new_bytes);  // TODO(cenz): either both size_t or both uint32_t
+  bytes_received += new_bytes;
   return processData(buffer);
 }
 

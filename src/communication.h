@@ -83,7 +83,6 @@ public:
     //}
   }
 
-  // TODO(cenz): implementation
   void bufferToMessage(const std::uint8_t* buffer, Message& message) {
     MessageType type;
     buffer = utils::deserialize(buffer, type);

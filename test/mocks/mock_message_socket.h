@@ -14,8 +14,8 @@ public:
   ~MockMessageSocket() = default;
   bool connect() override;
   void disconnect() override;
-  bool send(const void* data, size_t bytes) override;
-  size_t receive(void* data) override;
+  bool send(const void* data, uint32_t bytes) override;
+  uint32_t receive(void* data) override;
 
 private:
   bool is_connected;
@@ -30,8 +30,8 @@ public:
   LoopbackMockMessageSocket();
   bool connect() override;
   void disconnect() override;
-  bool send(const void* data, size_t bytes) override;
-  size_t receive(void* data) override;
+  bool send(const void* data, uint32_t bytes) override;
+  uint32_t receive(void* data) override;
 
 private:
   std::queue<std::uint8_t> send_receive_queue;

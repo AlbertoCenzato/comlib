@@ -14,8 +14,8 @@ class IMessageSocket
 public:
   virtual bool connect() = 0;
   virtual void disconnect() = 0;
-  virtual bool send(const void* data, size_t bytes) = 0;
-  virtual size_t receive(void* data) = 0;
+  virtual bool send(const void* data, uint32_t bytes) = 0;
+  virtual uint32_t receive(void* data) = 0;
 };
 
 enum class ConnectionStatus {
