@@ -1,53 +1,28 @@
 #include "communication.h"
+#include "serialization.h"
 
 namespace com {
 
 namespace internal {
-
-
-void fillMessage(BinaryMessage& message, const std::uint8_t* data);
-void fillMessage(MoveMessage& message, const std::uint8_t* data);
-void fillMessage(EmptyMessage& message, const std::uint8_t* data);
-void fillMessage(Int32Message& message, const std::uint8_t* data);
 
 void fillMessage(Message& message, MessageType type, const std::uint8_t* data) {
   message.type = type;
   switch (type)
   {
   case MessageType::BINARY_MESSAGE:
-    fillMessage(message.message.binary, data);
+    deserialize<BinaryMessage>(data, message.message.binary);
     break;
   case MessageType::MOVE_MESSAGE:
-    fillMessage(message.message.move, data);
+    deserialize<MoveMessage>(data, message.message.move);
     break;
   case MessageType::EMPTY_MESSAGE:
-    fillMessage(message.message.empty, data);
+    deserialize<EmptyMessage>(data, message.message.empty);
     break;
   case MessageType::INT32_MESSAGE:
-    fillMessage(message.message.int32, data);
+    deserialize<Int32Message>(data, message.message.int32);
+    break;
   }
 }
-
-void fillMessage(BinaryMessage& message, const std::uint8_t* data) {
-  std::uint32_t payload_length;
-  const std::uint8_t* payload = utils::deserialize(data, payload_length);
-  message.mallocAndSet(payload_length, payload);
-}
-
-void fillMessage(MoveMessage& message, const std::uint8_t* data) {
-  data = utils::deserialize(data, message.x);
-  data = utils::deserialize(data, message.y);
-  utils::deserialize(data, message.rot);
-}
-
-void fillMessage(EmptyMessage& message, const std::uint8_t* data) {
-
-}
-
-void fillMessage(Int32Message& message, const std::uint8_t* data) {
-  utils::deserialize(data, message.value);
-}
-
 
 }
 

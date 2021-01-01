@@ -3,6 +3,7 @@
 #include "communication_interface.h"
 #include "stream_message_reader.h"
 #include "utils.h"
+#include "serialization.h"
 #include <chrono>
 #include <map>
 #include <vector>
@@ -31,9 +32,9 @@ public:
 
   bool send(const BinaryMessage& message) {
     uint32_t message_length = sizeof(std::int16_t) + sizeof(message.payload_length) + message.payload_length;
-    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
-    data_buffer = utils::serialize(getMessageType<BinaryMessage>(), data_buffer);
-    data_buffer = utils::serialize(message.payload_length, data_buffer);
+    uint8_t* data_buffer = serialize(message_length, send_buffer);
+    data_buffer = serialize(getMessageType<BinaryMessage>(), data_buffer);
+    data_buffer = serialize(message.payload_length, data_buffer);
     memcpy(data_buffer, message.payload, message.payload_length);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
@@ -42,28 +43,28 @@ public:
   bool send(const MoveMessage& message) {
     uint32_t message_length = sizeof(std::int16_t) + sizeof(message);
 
-    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
-    data_buffer = utils::serialize(getMessageType<MoveMessage>(), send_buffer);
-    data_buffer = utils::serialize(message.x, data_buffer);
-    data_buffer = utils::serialize(message.y, data_buffer);
-    data_buffer = utils::serialize(message.rot, data_buffer);
+    uint8_t* data_buffer = serialize(message_length, send_buffer);
+    data_buffer = serialize(getMessageType<MoveMessage>(), send_buffer);
+    data_buffer = serialize(message.x, data_buffer);
+    data_buffer = serialize(message.y, data_buffer);
+    data_buffer = serialize(message.rot, data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
   bool send(const EmptyMessage& message) {
     uint32_t message_length = sizeof(std::int16_t);
-    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
-    data_buffer = utils::serialize(getMessageType<EmptyMessage>(), send_buffer);
+    uint8_t* data_buffer = serialize(message_length, send_buffer);
+    data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
   bool send(const Int32Message& message) {
     uint32_t message_length = sizeof(std::int16_t) + sizeof(message);
-    uint8_t* data_buffer = utils::serialize(message_length, send_buffer);
-    data_buffer = utils::serialize(getMessageType<EmptyMessage>(), send_buffer);
-    data_buffer = utils::serialize(message.value, send_buffer);
+    uint8_t* data_buffer = serialize(message_length, send_buffer);
+    data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
+    data_buffer = serialize(message.value, send_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
@@ -95,7 +96,7 @@ public:
 
   void bufferToMessage(const std::uint8_t* buffer, Message& message) {
     MessageType type;
-    buffer = utils::deserialize(buffer, type);
+    buffer = deserialize(buffer, type);
     internal::fillMessage(message, type, buffer);
   }
 

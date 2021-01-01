@@ -1,4 +1,5 @@
 #include "stream_message_reader.h"
+#include "serialization.h"
 
 namespace com {
 
@@ -51,7 +52,7 @@ bool StreamMessageReader::seek(const std::uint8_t* buffer) {
   if (bytes_received < sizeof(message_length))
     return false;
 
-  auto advanced_buffer_ptr = utils::deserialize(buffer, message_length);
+  auto advanced_buffer_ptr = deserialize(buffer, message_length);
   parsing_offset += static_cast<std::uint32_t>(advanced_buffer_ptr - buffer);  // TODO(cenz): cast?
 
   return true;

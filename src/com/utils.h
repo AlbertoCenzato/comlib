@@ -45,19 +45,6 @@ T copyFromBigEndian(const void* src) {
 }
 
 template <class T>
-std::uint8_t* serialize(const T& value, std::uint8_t* buffer) {
-  utils::copyToLittleEndian(value, buffer);
-  return buffer + sizeof(T);
-}
-
-template<class T>
-const std::uint8_t* deserialize(const std::uint8_t* buffer, T& value) {
-  value = utils::copyFromLittleEndian<T>(buffer);
-  return buffer + sizeof(T);
-}
-
-
-template <class T>
 std::uint8_t* toUBytesArray(T& value) {
   return reinterpret_cast<std::uint8_t*>(&value);
 }
