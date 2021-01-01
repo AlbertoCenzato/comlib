@@ -42,7 +42,7 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
 
   // socket buffer contains first message length only
   uint64_t first_message = 0x0123456789ABCDEF;
-  size_t first_message_length = sizeof(first_message);
+  uint32_t first_message_length = sizeof(first_message);
   socket.send(&first_message_length, sizeof(first_message_length));
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_FALSE(result);
@@ -50,12 +50,12 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   // socket buffer contains first message length + payload + second message length
   socket.send(&first_message, sizeof(first_message));
   uint32_t second_message = 0x456789AB;
-  size_t second_message_length = sizeof(second_message);
+  uint32_t second_message_length = sizeof(second_message);
   socket.send(&second_message_length, sizeof(second_message_length));
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_TRUE(result);
   auto message_ptr = receive_buffer + sizeof(first_message_length);
-  size_t received_first_message_length = utils::copyFromLittleEndian<size_t>(receive_buffer);
+  uint32_t received_first_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
   uint64_t received_first_message = com::utils::copyFromLittleEndian<uint64_t>(message_ptr);
   EXPECT_EQ(received_first_message_length, first_message_length);
   EXPECT_EQ(received_first_message, first_message);
@@ -63,7 +63,7 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   // socket buffer has no new data but buffer gets compacted
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_FALSE(result);
-  size_t received_second_message_length = utils::copyFromLittleEndian<size_t>(receive_buffer);
+  uint32_t received_second_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
   EXPECT_EQ(received_second_message_length, second_message_length);
 
   // socket buffer contains second message
@@ -71,7 +71,7 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_TRUE(result);
   auto second_message_ptr = receive_buffer + sizeof(second_message_length);
-  received_second_message_length = utils::copyFromLittleEndian<size_t>(receive_buffer);
+  received_second_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
   uint32_t received_second_message = utils::copyFromLittleEndian<uint32_t>(second_message_ptr);
   EXPECT_EQ(received_second_message_length, second_message_length);
   EXPECT_EQ(received_second_message, second_message);
