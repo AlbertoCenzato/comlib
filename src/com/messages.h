@@ -11,13 +11,12 @@ enum class MessageType {
   LOG = 2,
   MOVE_MESSAGE = 3,
   BINARY_MESSAGE = 4,
-  EMPTY_MESSAGE = 5
+  EMPTY_MESSAGE = 5,
+  INT32_MESSAGE = 6
 };
 
 
 struct BinaryMessage {
-  static const MessageType type;
-
   std::uint32_t payload_length;
   std::uint8_t* payload;
 
@@ -26,16 +25,40 @@ struct BinaryMessage {
 };
 
 struct MoveMessage {
-  static const MessageType type;
-
   float x;
   float y;
   float rot;
 };
 
 struct EmptyMessage {
-  static const MessageType type;
 };
+
+struct Int32Message {
+  int32_t value;
+};
+
+template <class T>
+constexpr MessageType getMessageType();
+
+template <>
+constexpr MessageType getMessageType<BinaryMessage>() {
+  return MessageType::BINARY_MESSAGE;
+}
+
+template <>
+constexpr MessageType getMessageType<MoveMessage>() {
+  return MessageType::MOVE_MESSAGE;
+}
+
+template <>
+constexpr MessageType getMessageType<EmptyMessage>() {
+  return MessageType::EMPTY_MESSAGE;
+}
+
+template <>
+constexpr MessageType getMessageType<Int32Message>() {
+  return MessageType::INT32_MESSAGE;
+}
 
 struct Message {
   MessageType type;
@@ -43,6 +66,7 @@ struct Message {
     BinaryMessage binary;
     MoveMessage move;
     EmptyMessage empty;
+    Int32Message int32;
   } message;
 
   static Message buildEmptyMessage();  // TODO(cenz): rename

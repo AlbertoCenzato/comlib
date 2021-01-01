@@ -8,6 +8,7 @@ namespace internal {
 void fillMessage(BinaryMessage& message, const std::uint8_t* data);
 void fillMessage(MoveMessage& message, const std::uint8_t* data);
 void fillMessage(EmptyMessage& message, const std::uint8_t* data);
+void fillMessage(Int32Message& message, const std::uint8_t* data);
 
 void fillMessage(Message& message, MessageType type, const std::uint8_t* data) {
   message.type = type;
@@ -21,6 +22,9 @@ void fillMessage(Message& message, MessageType type, const std::uint8_t* data) {
     break;
   case MessageType::EMPTY_MESSAGE:
     fillMessage(message.message.empty, data);
+    break;
+  case MessageType::INT32_MESSAGE:
+    fillMessage(message.message.int32, data);
   }
 }
 
@@ -39,6 +43,11 @@ void fillMessage(MoveMessage& message, const std::uint8_t* data) {
 void fillMessage(EmptyMessage& message, const std::uint8_t* data) {
 
 }
+
+void fillMessage(Int32Message& message, const std::uint8_t* data) {
+  utils::deserialize(data, message.value);
+}
+
 
 }
 

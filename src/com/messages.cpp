@@ -5,8 +5,6 @@
 
 namespace com {
 
-const MessageType BinaryMessage::type = MessageType::BINARY_MESSAGE;
-
 void BinaryMessage::mallocAndSet(std::uint32_t payload_length, const std::uint8_t* payload) {
   this->payload_length = payload_length;
   freeMemory();
@@ -19,10 +17,6 @@ void BinaryMessage::freeMemory() {
     std::free(payload);
   payload = nullptr;
 }
-
-
-const MessageType MoveMessage::type = MessageType::MOVE_MESSAGE;
-const MessageType EmptyMessage::type = MessageType::EMPTY_MESSAGE;
 
 
 Message Message::buildEmptyMessage() {
