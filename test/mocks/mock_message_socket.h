@@ -1,6 +1,6 @@
 #pragma once
 
-#include "communication_interface.h"
+#include <com/communication_interface.h>
 #include <queue>
 
 namespace com::test {

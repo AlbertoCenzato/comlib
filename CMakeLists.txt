@@ -2,7 +2,7 @@
 
 project ("comlib")
 
-file (GLOB_RECURSE SRC src/*.cpp) 
+file (GLOB_RECURSE SRC src/com/*.cpp) 
 add_library(comlib ${SRC})
 
 target_include_directories(comlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

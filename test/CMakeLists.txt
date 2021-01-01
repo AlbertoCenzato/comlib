@@ -6,7 +6,7 @@ else (MSVC)
 	set (SYSTEM_DEPENDENT_LIBS pthread)
 endif (MSVC)
 
-include_directories (. ../src ${GTEST_INCLUDE_DIRS})
+include_directories (. ${GTEST_INCLUDE_DIRS})
 
 # Mocks
 set (MOCKS_SRC

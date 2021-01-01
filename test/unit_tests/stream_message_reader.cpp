@@ -1,6 +1,6 @@
 #include "mocks/mock_message_socket.h"
-#include <stream_message_reader.h>
-#include <utils.h>
+#include <com/stream_message_reader.h>
+#include <com/utils.h>
 
 #include <gtest/gtest.h>
 

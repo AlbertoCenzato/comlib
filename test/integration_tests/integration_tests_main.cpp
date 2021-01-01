@@ -1,4 +1,4 @@
-#include <communication.h>
+#include <com/communication.h>
 
 #include "mocks/mock_message_socket.h"
 #include <thread>
