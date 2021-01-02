@@ -10,7 +10,7 @@ public:
   StreamMessageReader();
   ~StreamMessageReader() = default;
 
-  bool processIncomingBytes(IMessageSocket& socket, std::uint8_t* buffer);
+  bool processIncomingBytes(IMessageSocket& socket, uint8_t* buffer);
 
 private:
   enum class Status {
@@ -19,8 +19,8 @@ private:
   };
   
   Status status;
-  std::uint32_t parsing_offset;
-  std::uint32_t bytes_received;  // amount of data actually received 
+  uint32_t parsing_offset;
+  uint32_t bytes_received;  // amount of data actually received 
 
   // TODO(cenz): it's not a good idea that the StreamMessageReader should know the number of bytes 
   // occupied by the message length, since it is decided by MessageConveyor and it is a hidden dependency
@@ -28,13 +28,13 @@ private:
   bool buffer_should_be_compacted;
 
 
-  bool processData(std::uint8_t* buffer);
-  bool seek(const std::uint8_t* buffer);
-  bool parseMessage(const std::uint8_t* buffer);
+  bool processData(uint8_t* buffer);
+  bool seek(const uint8_t* buffer);
+  bool parseMessage(const uint8_t* buffer);
 
   // TODO(cenz): find a better name
   // compact buffer to free space for new data
-  void compactBuffer(std::uint8_t* buffer);
+  void compactBuffer(uint8_t* buffer);
 };
 
 

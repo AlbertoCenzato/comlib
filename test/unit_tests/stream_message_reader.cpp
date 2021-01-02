@@ -10,7 +10,7 @@ TEST(StreamMessageReader, receiveOneMessage) {
   test::LoopbackMockMessageSocket socket;
   socket.connect();
 
-  std::uint8_t receive_buffer[256];
+  uint8_t receive_buffer[256];
   StreamMessageReader stream_reader;
   bool result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_FALSE(result);
@@ -35,7 +35,7 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   socket.connect();
 
   // empty socket buffer
-  std::uint8_t receive_buffer[256];
+  uint8_t receive_buffer[256];
   StreamMessageReader stream_reader;
   bool result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_FALSE(result);

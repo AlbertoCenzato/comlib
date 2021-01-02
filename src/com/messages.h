@@ -17,10 +17,10 @@ enum class MessageType {
 
 
 struct BinaryMessage {
-  std::uint32_t payload_length;
-  std::uint8_t* payload;
+  uint32_t payload_length;
+  uint8_t* payload;
 
-  void mallocAndSet(std::uint32_t payload_length, const std::uint8_t* payload);
+  void mallocAndSet(uint32_t payload_length, const uint8_t* payload);
   void freeMemory();
 };
 

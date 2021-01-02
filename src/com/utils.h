@@ -45,24 +45,24 @@ T copyFromBigEndian(const void* src) {
 }
 
 template <class T>
-std::uint8_t* toUBytesArray(T& value) {
-  return reinterpret_cast<std::uint8_t*>(&value);
+uint8_t* toUBytesArray(T& value) {
+  return reinterpret_cast<uint8_t*>(&value);
 }
 
 template <class T>
-const std::uint8_t* toUBytesArray(const T& value) {
-  return reinterpret_cast<const std::uint8_t*>(&value);
+const uint8_t* toUBytesArray(const T& value) {
+  return reinterpret_cast<const uint8_t*>(&value);
 }
 
 template <class T>
-T fromUBytesArray(const std::uint8_t* data) {
+T fromUBytesArray(const uint8_t* data) {
   return *reinterpret_cast<const T*>(data);
 }
 
 void profileTime(const char* name, std::function<void()> func);
 
-void shiftBytesLeft(std::uint8_t* array, size_t length, size_t shift);
-void shiftBytesRight(std::uint8_t* array, size_t length, size_t shift);
+void shiftBytesLeft(uint8_t* array, size_t length, size_t shift);
+void shiftBytesRight(uint8_t* array, size_t length, size_t shift);
 
 }  // namespace utils
 

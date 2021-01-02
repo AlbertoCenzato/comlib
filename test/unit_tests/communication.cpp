@@ -9,7 +9,7 @@ using namespace com;
 //  test::LoopbackMockMessageSocket socket;
 //  MessageConveyor<256> converyor{ &socket };
 //
-//  std::uint64_t payload = 0x0123456789ABCDEF;
+//  uint64_t payload = 0x0123456789ABCDEF;
 //  BinaryMessage message{ sizeof(payload), utils::toUBytesArray(payload) };
 //  converyor.send(message);
 //
@@ -18,7 +18,7 @@ using namespace com;
 //
 //  EXPECT_EQ(reply.type, MessageType::BINARY_MESSAGE);
 //  EXPECT_EQ(reply.message.binary.payload_length, message.payload_length);
-//  EXPECT_EQ(utils::fromUBytesArray<std::uint64_t>(reply.message.binary.payload), payload);
+//  EXPECT_EQ(utils::fromUBytesArray<uint64_t>(reply.message.binary.payload), payload);
 //
 //  if (reply.type == MessageType::BINARY_MESSAGE)
 //    reply.message.binary.freeMemory();

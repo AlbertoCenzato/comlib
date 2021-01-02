@@ -13,7 +13,7 @@ namespace com {
 
 namespace internal {
 
-void fillMessage(Message& message, MessageType type, const std::uint8_t* data);
+void fillMessage(Message& message, MessageType type, const uint8_t* data);
 
 }
 
@@ -31,7 +31,7 @@ public:
   void disconnect() { return socket->disconnect(); }
 
   bool send(const BinaryMessage& message) {
-    uint32_t message_length = sizeof(std::int16_t) + sizeof(message.payload_length) + message.payload_length;
+    uint32_t message_length = sizeof(int16_t) + sizeof(message.payload_length) + message.payload_length;
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<BinaryMessage>(), data_buffer);
     data_buffer = serialize(message.payload_length, data_buffer);
@@ -41,7 +41,7 @@ public:
   }
   
   bool send(const MoveMessage& message) {
-    uint32_t message_length = sizeof(std::int16_t) + sizeof(message);
+    uint32_t message_length = sizeof(int16_t) + sizeof(message);
 
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<MoveMessage>(), send_buffer);
@@ -53,7 +53,7 @@ public:
   }
 
   bool send(const EmptyMessage& message) {
-    uint32_t message_length = sizeof(std::int16_t);
+    uint32_t message_length = sizeof(int16_t);
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
 
@@ -61,7 +61,7 @@ public:
   }
 
   bool send(const Int32Message& message) {
-    uint32_t message_length = sizeof(std::int16_t) + sizeof(message);
+    uint32_t message_length = sizeof(int16_t) + sizeof(message);
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
     data_buffer = serialize(message.value, send_buffer);
@@ -72,7 +72,7 @@ public:
   //void receive(Message& message) {
   //  MessageType type;
   //  size_t message_length = socket->receive(receive_buffer);
-  //  const std::uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
+  //  const uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
   //  internal::fillMessage(message, type, data_buffer);
   //}
 
@@ -83,7 +83,7 @@ public:
     if (!is_complete_message)
       return {};
 
-    const std::uint8_t* message_begin = receive_buffer + sizeof(size_t);
+    const uint8_t* message_begin = receive_buffer + sizeof(size_t);
     Message message;
     bufferToMessage(message_begin, message);
     return message;
@@ -94,7 +94,7 @@ public:
     //}
   }
 
-  void bufferToMessage(const std::uint8_t* buffer, Message& message) {
+  void bufferToMessage(const uint8_t* buffer, Message& message) {
     MessageType type;
     buffer = deserialize(buffer, type);
     internal::fillMessage(message, type, buffer);
@@ -123,8 +123,8 @@ public:
   }*/
 
 private:
-  std::uint8_t send_buffer[BUFFER_SIZE];
-  std::uint8_t receive_buffer[BUFFER_SIZE];
+  uint8_t send_buffer[BUFFER_SIZE];
+  uint8_t receive_buffer[BUFFER_SIZE];
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;

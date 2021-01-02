@@ -28,36 +28,36 @@ TEST(reverseMemcpy, reverseMemcpy)
 
 TEST(endianness, littleEndianUINT16)
 {
-  std::uint16_t x = 0x0123;
-  std::uint16_t dest;
+  uint16_t x = 0x0123;
+  uint16_t dest;
 
   utils::copyToLittleEndian(x, &dest);
   
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0x23);
   EXPECT_EQ(*(dest_ptr + 1), 0x01);
 }
 
 TEST(endianness, bigEndianUINT16)
 {
-  std::uint16_t x = 0x0123;
-  std::uint16_t dest;
+  uint16_t x = 0x0123;
+  uint16_t dest;
 
   utils::copyToBigEndian(x, &dest);
 
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0x01);
   EXPECT_EQ(*(dest_ptr + 1), 0x23);
 }
 
 TEST(endianness, littleEndianUINT32)
 {
-  std::uint32_t x = 0x01234567;
-  std::uint32_t dest;
+  uint32_t x = 0x01234567;
+  uint32_t dest;
 
   utils::copyToLittleEndian(x, &dest);
 
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0x67);
   EXPECT_EQ(*(dest_ptr + 1), 0x45);
   EXPECT_EQ(*(dest_ptr + 2), 0x23);
@@ -66,12 +66,12 @@ TEST(endianness, littleEndianUINT32)
 
 TEST(endianness, bigEndianUINT32)
 {
-  std::uint32_t x = 0x01234567;
-  std::uint32_t dest;
+  uint32_t x = 0x01234567;
+  uint32_t dest;
 
   utils::copyToBigEndian(x, &dest);
   
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0x01);
   EXPECT_EQ(*(dest_ptr + 1), 0x23);
   EXPECT_EQ(*(dest_ptr + 2), 0x45);
@@ -80,12 +80,12 @@ TEST(endianness, bigEndianUINT32)
 
 TEST(endianness, littleEndianUINT64)
 {
-  std::uint64_t x = 0x0123456789ABCDEF; 
-  std::uint64_t dest;
+  uint64_t x = 0x0123456789ABCDEF; 
+  uint64_t dest;
 
   utils::copyToLittleEndian(x, &dest);
 
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0xEF);
   EXPECT_EQ(*(dest_ptr + 1), 0xCD);
   EXPECT_EQ(*(dest_ptr + 2), 0xAB);
@@ -98,12 +98,12 @@ TEST(endianness, littleEndianUINT64)
 
 TEST(endianness, bigEndianUINT64)
 {
-  std::uint64_t x = 0x0123456789ABCDEF;
-  std::uint64_t dest;
+  uint64_t x = 0x0123456789ABCDEF;
+  uint64_t dest;
 
   utils::copyToBigEndian(x, &dest);
 
-  std::uint8_t* dest_ptr = reinterpret_cast<std::uint8_t*>(&dest);
+  uint8_t* dest_ptr = reinterpret_cast<uint8_t*>(&dest);
   EXPECT_EQ(*(dest_ptr + 0), 0x01);
   EXPECT_EQ(*(dest_ptr + 1), 0x23);
   EXPECT_EQ(*(dest_ptr + 2), 0x45);
@@ -116,66 +116,66 @@ TEST(endianness, bigEndianUINT64)
 
 TEST(endianness, fromLittleEndianUINT16)
 {
-  std::uint16_t x = 0x0123;
-  std::uint16_t x1;
+  uint16_t x = 0x0123;
+  uint16_t x1;
 
   utils::copyToLittleEndian(x, &x1);
-  std::uint16_t dest = utils::copyFromLittleEndian<std::uint16_t>(&x1);
+  uint16_t dest = utils::copyFromLittleEndian<uint16_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }
 
 TEST(endianness, fromBigEndianUINT16)
 {
-  std::uint16_t x = 0x0123;
-  std::uint16_t x1;
+  uint16_t x = 0x0123;
+  uint16_t x1;
 
   utils::copyToBigEndian(x, &x1);
-  std::uint16_t dest = utils::copyFromBigEndian<std::uint16_t>(&x1);
+  uint16_t dest = utils::copyFromBigEndian<uint16_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }
 
 TEST(endianness, fromLittleEndianUINT32)
 {
-  std::uint32_t x = 0x01234567;
-  std::uint32_t x1;
+  uint32_t x = 0x01234567;
+  uint32_t x1;
 
   utils::copyToLittleEndian(x, &x1);
-  std::uint32_t dest = utils::copyFromLittleEndian<std::uint32_t>(&x1);
+  uint32_t dest = utils::copyFromLittleEndian<uint32_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }
 
 TEST(endianness, fromBigEndianUINT32)
 {
-  std::uint32_t x = 0x01234567;
-  std::uint32_t x1;
+  uint32_t x = 0x01234567;
+  uint32_t x1;
 
   utils::copyToBigEndian(x, &x1);
-  std::uint32_t dest = utils::copyFromBigEndian<std::uint32_t>(&x1);
+  uint32_t dest = utils::copyFromBigEndian<uint32_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }
 
 TEST(endianness, fromLittleEndianUINT64)
 {
-  std::uint64_t x = 0x0123456789ABCDEF;
-  std::uint64_t x1;
+  uint64_t x = 0x0123456789ABCDEF;
+  uint64_t x1;
 
   utils::copyToLittleEndian(x, &x1);
-  std::uint64_t dest = utils::copyFromLittleEndian<std::uint64_t>(&x1);
+  uint64_t dest = utils::copyFromLittleEndian<uint64_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }
 
 TEST(endianness, fromBigEndianUINT64)
 {
-  std::uint64_t x = 0x0123456789ABCDEF;
-  std::uint64_t x1;
+  uint64_t x = 0x0123456789ABCDEF;
+  uint64_t x1;
 
   utils::copyToBigEndian(x, &x1);
-  std::uint64_t dest = utils::copyFromBigEndian<std::uint64_t>(&x1);
+  uint64_t dest = utils::copyFromBigEndian<uint64_t>(&x1);
 
   EXPECT_EQ(x, dest);
 }

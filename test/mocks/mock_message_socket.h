@@ -9,8 +9,8 @@ class MockMessageSocket : public IMessageSocket
 {
 public:
   MockMessageSocket(
-    std::queue<std::uint8_t>* send_queue, 
-    std::queue<std::uint8_t>* receive_queue);
+    std::queue<uint8_t>* send_queue, 
+    std::queue<uint8_t>* receive_queue);
   ~MockMessageSocket() = default;
   bool connect() override;
   void disconnect() override;
@@ -19,8 +19,8 @@ public:
 
 private:
   bool is_connected;
-  std::queue<std::uint8_t>* send_queue;
-  std::queue<std::uint8_t>* receive_queue;
+  std::queue<uint8_t>* send_queue;
+  std::queue<uint8_t>* receive_queue;
 };
 
 
@@ -34,7 +34,7 @@ public:
   uint32_t receive(void* data) override;
 
 private:
-  std::queue<std::uint8_t> send_receive_queue;
+  std::queue<uint8_t> send_receive_queue;
   MockMessageSocket send_socket;
   MockMessageSocket receive_socket;
 };

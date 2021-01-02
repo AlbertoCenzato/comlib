@@ -6,8 +6,8 @@ namespace com::test {
 // ------------ MockMessageSocket ----------------
 
 MockMessageSocket::MockMessageSocket(
-  std::queue<std::uint8_t>* send_queue,
-  std::queue<std::uint8_t>* receive_queue) 
+  std::queue<uint8_t>* send_queue,
+  std::queue<uint8_t>* receive_queue) 
   : is_connected(false), 
     send_queue(send_queue), 
     receive_queue(receive_queue)
@@ -28,7 +28,7 @@ void MockMessageSocket::disconnect() {
 bool MockMessageSocket::send(const void* data, uint32_t bytes) {
   if (send_queue->size() + bytes > std::numeric_limits<uint32_t>::max())
     return false;  // queue has reached its maximum capacity
-  auto data_ptr = reinterpret_cast<const std::uint8_t*>(data);
+  auto data_ptr = reinterpret_cast<const uint8_t*>(data);
   for (uint32_t i = 0; i < bytes; ++i) {
     send_queue->push(data_ptr[i]);
   }
@@ -37,7 +37,7 @@ bool MockMessageSocket::send(const void* data, uint32_t bytes) {
 
 uint32_t MockMessageSocket::receive(void* data) {
   size_t data_length = receive_queue->size();
-  auto data_ptr = reinterpret_cast<std::uint8_t*>(data);
+  auto data_ptr = reinterpret_cast<uint8_t*>(data);
   for (size_t i = 0; i < data_length; ++i) {
     data_ptr[i] = receive_queue->front();
     receive_queue->pop();

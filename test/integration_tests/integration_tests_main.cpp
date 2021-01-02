@@ -6,7 +6,7 @@
 #include <numeric>
 #include <iostream>
 
-using Buffer = std::queue<std::uint8_t>;
+using Buffer = std::queue<uint8_t>;
 
 void send(Buffer* send_queue, Buffer* receive_queue, const std::vector<int>& data);
 void receive(Buffer* send_queue, Buffer* receive_queue, std::vector<int>& data);

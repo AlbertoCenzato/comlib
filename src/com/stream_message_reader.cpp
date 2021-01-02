@@ -13,7 +13,7 @@ StreamMessageReader::StreamMessageReader()
 
 }
 
-bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, std::uint8_t* buffer) {
+bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, uint8_t* buffer) {
   if (buffer_should_be_compacted) {
     compactBuffer(buffer);
     buffer_should_be_compacted = false;
@@ -27,7 +27,7 @@ bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, std::uint
   return processData(buffer);
 }
 
-bool StreamMessageReader::processData(std::uint8_t* buffer) {
+bool StreamMessageReader::processData(uint8_t* buffer) {
   if (status == Status::SEEK) {
     bool seek_ok = seek(buffer);
     if (seek_ok) {  
@@ -48,17 +48,17 @@ bool StreamMessageReader::processData(std::uint8_t* buffer) {
   return false;  // NOTE: this statement should be unreachable
 }
 
-bool StreamMessageReader::seek(const std::uint8_t* buffer) {
+bool StreamMessageReader::seek(const uint8_t* buffer) {
   if (bytes_received < sizeof(message_length))
     return false;
 
   auto advanced_buffer_ptr = deserialize(buffer, message_length);
-  parsing_offset += static_cast<std::uint32_t>(advanced_buffer_ptr - buffer);  // TODO(cenz): cast?
+  parsing_offset += static_cast<uint32_t>(advanced_buffer_ptr - buffer);  // TODO(cenz): cast?
 
   return true;
 }
 
-bool StreamMessageReader::parseMessage(const std::uint8_t* buffer) {
+bool StreamMessageReader::parseMessage(const uint8_t* buffer) {
   // NOTE: -parsing_offset to not take into account message length data
   if (message_length > bytes_received - parsing_offset)  
     return false;  // we have to wait for another chunk of data
@@ -69,7 +69,7 @@ bool StreamMessageReader::parseMessage(const std::uint8_t* buffer) {
   return true;
 }
 
-void StreamMessageReader::compactBuffer(std::uint8_t* buffer) {
+void StreamMessageReader::compactBuffer(uint8_t* buffer) {
   utils::shiftBytesLeft(buffer + parsing_offset, bytes_received, parsing_offset);
   parsing_offset = 0;
 }
