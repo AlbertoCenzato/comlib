@@ -30,16 +30,16 @@ const std::uint8_t* deserialize<MessageType>(const std::uint8_t* data, MessageTy
 template<> inline
 const uint8_t* deserialize<BinaryMessage>(const std::uint8_t* data, BinaryMessage& message) {
   std::uint32_t payload_length;
-  const std::uint8_t* payload = utils::deserialize(data, payload_length);
+  const std::uint8_t* payload = deserialize(data, payload_length);
   message.mallocAndSet(payload_length, payload);
   return payload + payload_length;
 }
 
 template<> inline
 const uint8_t* deserialize<MoveMessage>(const std::uint8_t* data, MoveMessage& message) {
-  data = utils::deserialize(data, message.x);
-  data = utils::deserialize(data, message.y);
-  return utils::deserialize(data, message.rot);
+  data = deserialize(data, message.x);
+  data = deserialize(data, message.y);
+  return deserialize(data, message.rot);
 }
 
 template<> inline
@@ -49,7 +49,7 @@ const uint8_t* deserialize<EmptyMessage>(const std::uint8_t* data, EmptyMessage&
 
 template<> inline
 const uint8_t* deserialize<Int32Message>(const std::uint8_t* data, Int32Message& message) {
-  return utils::deserialize(data, message.value);
+  return deserialize(data, message.value);
 }
 
 
