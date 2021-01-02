@@ -21,36 +21,36 @@ void littleEndianCopy(void* dest, const void* src, size_t len);
 void bigEndianCopy(void* dest, const void* src, size_t len);
 
 template <class T>
-void copyToLittleEndian(T value, void* dest) {
+void toLittleEndian(T value, void* dest) {
   littleEndianCopy(dest, reinterpret_cast<const void*>(&value), sizeof(T));
 }
 
 template <class T>
-void copyToBigEndian(T value, void* dest) {
+void toBigEndian(T value, void* dest) {
   bigEndianCopy(dest, reinterpret_cast<const void*>(&value), sizeof(T));
 }
 
 template <class T>
-T copyFromLittleEndian(const void* src) {
+T fromLittleEndian(const void* src) {
   T value;
   littleEndianCopy(&value, src, sizeof(T));
   return value;
 }
 
 template <class T>
-T copyFromBigEndian(const void* src) {
+T fromBigEndian(const void* src) {
   T value;
   bigEndianCopy(&value, src, sizeof(T));
   return value;
 }
 
 template <class T>
-uint8_t* toUBytesArray(T& value) {
+uint8_t* asUBytesArray(T& value) {
   return reinterpret_cast<uint8_t*>(&value);
 }
 
 template <class T>
-const uint8_t* toUBytesArray(const T& value) {
+const uint8_t* asUBytesArray(const T& value) {
   return reinterpret_cast<const uint8_t*>(&value);
 }
 

@@ -26,7 +26,7 @@ TEST(StreamMessageReader, receiveOneMessage) {
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_TRUE(result);
   auto message_ptr = receive_buffer + sizeof(message_length);
-  uint64_t received_message = com::utils::copyFromLittleEndian<uint64_t>(message_ptr);
+  uint64_t received_message = com::utils::fromLittleEndian<uint64_t>(message_ptr);
   EXPECT_EQ(received_message, message);
 }
 
@@ -55,15 +55,15 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_TRUE(result);
   auto message_ptr = receive_buffer + sizeof(first_message_length);
-  uint32_t received_first_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
-  uint64_t received_first_message = com::utils::copyFromLittleEndian<uint64_t>(message_ptr);
+  uint32_t received_first_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);
+  uint64_t received_first_message = com::utils::fromLittleEndian<uint64_t>(message_ptr);
   EXPECT_EQ(received_first_message_length, first_message_length);
   EXPECT_EQ(received_first_message, first_message);
   
   // socket buffer has no new data but buffer gets compacted
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_FALSE(result);
-  uint32_t received_second_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
+  uint32_t received_second_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);
   EXPECT_EQ(received_second_message_length, second_message_length);
 
   // socket buffer contains second message
@@ -71,8 +71,8 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   result = stream_reader.processIncomingBytes(socket, receive_buffer);
   EXPECT_TRUE(result);
   auto second_message_ptr = receive_buffer + sizeof(second_message_length);
-  received_second_message_length = utils::copyFromLittleEndian<uint32_t>(receive_buffer);
-  uint32_t received_second_message = utils::copyFromLittleEndian<uint32_t>(second_message_ptr);
+  received_second_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);
+  uint32_t received_second_message = utils::fromLittleEndian<uint32_t>(second_message_ptr);
   EXPECT_EQ(received_second_message_length, second_message_length);
   EXPECT_EQ(received_second_message, second_message);
 }

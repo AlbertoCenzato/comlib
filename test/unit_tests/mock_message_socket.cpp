@@ -24,7 +24,7 @@ TEST(MockMessageSocket, send) {
     tmp[i] = send_q.front();
     send_q.pop();
   }
-  uint64_t retrieved_value = com::utils::copyFromLittleEndian<uint64_t>(tmp);
+  uint64_t retrieved_value = com::utils::fromLittleEndian<uint64_t>(tmp);
 
   EXPECT_EQ(value, retrieved_value);
 }
@@ -36,7 +36,7 @@ TEST(MockMessageSocket, receive) {
 
   uint64_t value = 0x0123456789ABCDEF;
   uint8_t tmp[sizeof(value)];
-  com::utils::copyToLittleEndian(value, tmp);
+  com::utils::toLittleEndian(value, tmp);
   for (size_t i = 0; i < sizeof(value); ++i) {
     receive_q.push(tmp[i]);
   }
@@ -45,7 +45,7 @@ TEST(MockMessageSocket, receive) {
   size_t bytes_received = socket.receive(tmp_2);
   EXPECT_EQ(sizeof(value), bytes_received);
 
-  uint64_t retrieved_value = com::utils::copyFromLittleEndian<uint64_t>(tmp_2);
+  uint64_t retrieved_value = com::utils::fromLittleEndian<uint64_t>(tmp_2);
   EXPECT_EQ(value, retrieved_value);
 }
 
@@ -63,7 +63,7 @@ TEST(LoopbackMockMessageSocket, sendReceive) {
   uint8_t tmp[sizeof(value)];
   size_t bytes_received = socket.receive(tmp);
   EXPECT_EQ(bytes_received, sizeof(value));
-  uint64_t received_value = com::utils::copyFromLittleEndian<uint64_t>(tmp);
+  uint64_t received_value = com::utils::fromLittleEndian<uint64_t>(tmp);
   EXPECT_EQ(value, received_value);
 
 }
