@@ -1,6 +1,7 @@
+#include <com/utils.h>
+
 #include <gtest/gtest.h>
 
-#include <com/utils.h>
 #include <numeric>
 
 using namespace com;

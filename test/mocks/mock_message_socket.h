@@ -1,6 +1,7 @@
 #pragma once
 
 #include <com/communication_interface.h>
+
 #include <queue>
 
 namespace com::test {

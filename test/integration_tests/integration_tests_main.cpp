@@ -1,6 +1,7 @@
+#include "mocks/mock_message_socket.h"
+
 #include <com/communication.h>
 
-#include "mocks/mock_message_socket.h"
 #include <thread>
 #include <vector>
 #include <numeric>

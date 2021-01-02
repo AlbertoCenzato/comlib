@@ -1,11 +1,12 @@
 #pragma once
 
+#include "macros.h"
+
 #include <cstring>
 #include <cinttypes>
 #include <functional>
 #include <chrono>
 #include <iostream>
-#include "macros.h"
 
 namespace com {
 

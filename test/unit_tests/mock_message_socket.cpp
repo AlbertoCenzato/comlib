@@ -1,4 +1,5 @@
 #include "mocks/mock_message_socket.h"
+
 #include <com/utils.h>
 
 #include <gtest/gtest.h>

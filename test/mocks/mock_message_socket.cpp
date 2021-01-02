@@ -1,4 +1,5 @@
 #include "mock_message_socket.h"
+
 #include <com/utils.h>
 
 namespace com::test {

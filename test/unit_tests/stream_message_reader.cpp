@@ -1,4 +1,5 @@
 #include "mocks/mock_message_socket.h"
+
 #include <com/stream_message_reader.h>
 #include <com/utils.h>
 

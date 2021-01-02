@@ -1,11 +1,12 @@
 #pragma once
 
+#include "messages.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <string>
 #include <ostream>
 
-#include "messages.h"
 
 namespace com {
 
