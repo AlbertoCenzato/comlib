@@ -47,7 +47,7 @@ public:
     uint32_t message_length = sizeof(MessageType) + sizeof(message);
 
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<MoveMessage>(), send_buffer);
+    data_buffer = serialize(getMessageType<MoveMessage>(), data_buffer);
     data_buffer = serialize(message.x, data_buffer);
     data_buffer = serialize(message.y, data_buffer);
     data_buffer = serialize(message.rot, data_buffer);
@@ -58,7 +58,7 @@ public:
   bool send(const EmptyMessage& message) {
     uint32_t message_length = sizeof(MessageType);
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
+    data_buffer = serialize(getMessageType<EmptyMessage>(), data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
@@ -66,8 +66,8 @@ public:
   bool send(const Int32Message& message) {
     uint32_t message_length = sizeof(MessageType) + sizeof(message);
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<EmptyMessage>(), send_buffer);
-    data_buffer = serialize(message.value, send_buffer);
+    data_buffer = serialize(getMessageType<Int32Message>(), data_buffer);
+    data_buffer = serialize(message.value, data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
