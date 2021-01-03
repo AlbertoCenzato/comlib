@@ -43,7 +43,7 @@ TEST(MockMessageSocket, receive) {
   }
 
   uint8_t tmp_2[sizeof(value)];
-  size_t bytes_received = socket.receive(tmp_2);
+  size_t bytes_received = socket.receive(tmp_2, sizeof(value));
   EXPECT_EQ(sizeof(value), bytes_received);
 
   uint64_t retrieved_value = com::utils::fromLittleEndian<uint64_t>(tmp_2);
@@ -62,7 +62,7 @@ TEST(LoopbackMockMessageSocket, sendReceive) {
   socket.send(&value, sizeof(value));
 
   uint8_t tmp[sizeof(value)];
-  size_t bytes_received = socket.receive(tmp);
+  size_t bytes_received = socket.receive(tmp, sizeof(value));
   EXPECT_EQ(bytes_received, sizeof(value));
   uint64_t received_value = com::utils::fromLittleEndian<uint64_t>(tmp);
   EXPECT_EQ(value, received_value);

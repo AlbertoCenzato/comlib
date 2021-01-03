@@ -11,20 +11,21 @@ TEST(StreamMessageReader, receiveOneMessage) {
   test::LoopbackMockMessageSocket socket;
   socket.connect();
 
-  uint8_t receive_buffer[256];
+  const uint32_t BUFFER_SIZE = 256;
+  uint8_t receive_buffer[BUFFER_SIZE];
   StreamMessageReader stream_reader;
-  bool result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  bool result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_FALSE(result);
 
   uint64_t message = 0x0123456789ABCDEF;
   size_t message_length = sizeof(message);
   socket.send(&message_length, sizeof(message_length));
 
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_FALSE(result);
 
   socket.send(&message, sizeof(message));
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_TRUE(result);
   auto message_ptr = receive_buffer + sizeof(message_length);
   uint64_t received_message = com::utils::fromLittleEndian<uint64_t>(message_ptr);
@@ -36,16 +37,17 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   socket.connect();
 
   // empty socket buffer
+  const uint32_t BUFFER_SIZE = 256;
   uint8_t receive_buffer[256];
   StreamMessageReader stream_reader;
-  bool result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  bool result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_FALSE(result);
 
   // socket buffer contains first message length only
   uint64_t first_message = 0x0123456789ABCDEF;
   uint32_t first_message_length = sizeof(first_message);
   socket.send(&first_message_length, sizeof(first_message_length));
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_FALSE(result);
 
   // socket buffer contains first message length + payload + second message length
@@ -53,7 +55,7 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   uint32_t second_message = 0x456789AB;
   uint32_t second_message_length = sizeof(second_message);
   socket.send(&second_message_length, sizeof(second_message_length));
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_TRUE(result);
   auto message_ptr = receive_buffer + sizeof(first_message_length);
   uint32_t received_first_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);
@@ -62,14 +64,14 @@ TEST(StreamMessageReader, receiveMultipleMessages) {
   EXPECT_EQ(received_first_message, first_message);
   
   // socket buffer has no new data but buffer gets compacted
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_FALSE(result);
   uint32_t received_second_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);
   EXPECT_EQ(received_second_message_length, second_message_length);
 
   // socket buffer contains second message
   socket.send(&second_message, sizeof(second_message));
-  result = stream_reader.processIncomingBytes(socket, receive_buffer);
+  result = stream_reader.processIncomingBytes(socket, receive_buffer, BUFFER_SIZE);
   EXPECT_TRUE(result);
   auto second_message_ptr = receive_buffer + sizeof(second_message_length);
   received_second_message_length = utils::fromLittleEndian<uint32_t>(receive_buffer);

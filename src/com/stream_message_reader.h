@@ -10,7 +10,7 @@ public:
   StreamMessageReader();
   ~StreamMessageReader() = default;
 
-  bool processIncomingBytes(IMessageSocket& socket, uint8_t* buffer);
+  bool processIncomingBytes(IMessageSocket& socket, uint8_t* buffer, uint32_t buffer_size);
 
 private:
   enum class Status {

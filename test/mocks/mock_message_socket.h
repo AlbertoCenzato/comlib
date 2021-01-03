@@ -16,7 +16,7 @@ public:
   bool connect() override;
   void disconnect() override;
   bool send(const void* data, uint32_t bytes) override;
-  uint32_t receive(void* data) override;
+  uint32_t receive(void* data, uint32_t bytes) override;
 
 private:
   bool is_connected;
@@ -32,7 +32,7 @@ public:
   bool connect() override;
   void disconnect() override;
   bool send(const void* data, uint32_t bytes) override;
-  uint32_t receive(void* data) override;
+  uint32_t receive(void* data, uint32_t bytes) override;
 
 private:
   std::queue<uint8_t> send_receive_queue;

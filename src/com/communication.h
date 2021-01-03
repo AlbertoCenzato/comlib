@@ -82,7 +82,8 @@ public:
   std::optional<Message> processIncomingMessage() {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
-    bool is_complete_message = stream_reader.processIncomingBytes(*socket, receive_buffer);
+    bool is_complete_message = 
+      stream_reader.processIncomingBytes(*socket, receive_buffer, BUFFER_SIZE);
     if (!is_complete_message)
       return {};
 

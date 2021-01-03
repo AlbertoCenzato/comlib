@@ -36,14 +36,15 @@ bool MockMessageSocket::send(const void* data, uint32_t bytes) {
   return true;
 }
 
-uint32_t MockMessageSocket::receive(void* data) {
-  size_t data_length = receive_queue->size();
+uint32_t MockMessageSocket::receive(void* data, uint32_t bytes) {
+  auto data_length = static_cast<uint32_t>(receive_queue->size());
   auto data_ptr = reinterpret_cast<uint8_t*>(data);
-  for (size_t i = 0; i < data_length; ++i) {
+  const uint32_t bytes_to_read = std::min(data_length, bytes);
+  for (uint32_t i = 0; i < bytes_to_read; ++i) {
     data_ptr[i] = receive_queue->front();
     receive_queue->pop();
   }
-  return static_cast<uint32_t>(data_length);
+  return bytes_to_read;
 }
 
 // ----------------- LoopbackMockMessageSocket -------------------------
@@ -71,8 +72,9 @@ bool LoopbackMockMessageSocket::send(const void* data, uint32_t bytes) {
   return send_socket.send(data, bytes);
 }
 
-uint32_t LoopbackMockMessageSocket::receive(void* data) {
-  return receive_socket.receive(data);
+uint32_t LoopbackMockMessageSocket::receive(void* data, uint32_t bytes) {
+  return receive_socket.receive(data, bytes);
+}
 }
 
 }

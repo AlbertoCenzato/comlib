@@ -13,13 +13,14 @@ StreamMessageReader::StreamMessageReader()
 
 }
 
-bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, uint8_t* buffer) {
+bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, uint8_t* buffer, uint32_t buffer_size) {
   if (buffer_should_be_compacted) {
     compactBuffer(buffer);
     buffer_should_be_compacted = false;
   }
 
   uint32_t new_bytes = socket.receive(buffer + bytes_received);
+  uint32_t new_bytes = socket.receive(buffer + bytes_received, buffer_size);
   if (new_bytes <= 0)
     return false;
 
