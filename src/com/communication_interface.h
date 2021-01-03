@@ -37,6 +37,7 @@ inline std::string to_string(MessageType message_type)
   case MessageType::EMPTY_MESSAGE:  return "EMPTY_MESSAGE";
   case MessageType::LOG:   return "LOG";
   case MessageType::MOVE_MESSAGE: return "MOVE_MESSAGE";
+  case MessageType::INT32_MESSAGE: return "INT32_MESSAGE";
   }
 
   return "UNKNOWN_VALUE";
