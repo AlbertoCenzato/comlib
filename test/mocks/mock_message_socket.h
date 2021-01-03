@@ -3,6 +3,7 @@
 #include <com/communication_interface.h>
 
 #include <queue>
+#include <mutex>
 
 namespace com::test {
 
@@ -38,6 +39,18 @@ private:
   std::queue<uint8_t> send_receive_queue;
   MockMessageSocket send_socket;
   MockMessageSocket receive_socket;
+};
+
+class ThreadsafeLoopbackSocket : public LoopbackMockMessageSocket 
+{
+public:
+  bool connect() override;
+  void disconnect() override;
+  bool send(const void* data, uint32_t bytes) override;
+  uint32_t receive(void* data, uint32_t bytes) override;
+
+private:
+  std::mutex mutex;
 };
 
 }

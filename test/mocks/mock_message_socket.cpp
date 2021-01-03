@@ -75,6 +75,27 @@ bool LoopbackMockMessageSocket::send(const void* data, uint32_t bytes) {
 uint32_t LoopbackMockMessageSocket::receive(void* data, uint32_t bytes) {
   return receive_socket.receive(data, bytes);
 }
+
+
+bool ThreadsafeLoopbackSocket::connect() {
+  std::lock_guard<std::mutex> lock{ mutex };
+  return LoopbackMockMessageSocket::connect();
+}
+
+void ThreadsafeLoopbackSocket::disconnect() {
+  std::lock_guard<std::mutex> lock{ mutex };
+  LoopbackMockMessageSocket::disconnect();
+  return;
+}
+
+bool ThreadsafeLoopbackSocket::send(const void* data, uint32_t bytes) {
+  std::lock_guard<std::mutex> lock{ mutex };
+  return LoopbackMockMessageSocket::send(data, bytes);
+}
+
+uint32_t ThreadsafeLoopbackSocket::receive(void* data, uint32_t bytes) {
+  std::lock_guard<std::mutex> lock{ mutex };
+  return LoopbackMockMessageSocket::receive(data, bytes);
 }
 
 }
