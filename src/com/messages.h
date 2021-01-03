@@ -4,7 +4,7 @@
 
 namespace com {
 
-enum class MessageType {
+enum class MessageType : int16_t {
   ERROR = -1,
   ACK = 0,
   NACK = 1,

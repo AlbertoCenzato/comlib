@@ -6,7 +6,7 @@ namespace com {
 
 template <> inline
 uint8_t* serialize<MessageType>(const MessageType& type, uint8_t* buffer) {
-  return serialize(static_cast<int16_t>(type), buffer);
+  return serialize(static_cast<std::underlying_type_t<MessageType>>(type), buffer);
 }
 
 template <> inline
@@ -24,7 +24,7 @@ const uint8_t* deserialize<float>(const uint8_t* data, float& value) {
 
 template<> inline
 const uint8_t* deserialize<MessageType>(const uint8_t* data, MessageType& value) {
-  return deserialize(data, reinterpret_cast<int16_t&>(value));
+  return deserialize(data, reinterpret_cast<std::underlying_type_t<MessageType>&>(value));
 }
 
 template<> inline
