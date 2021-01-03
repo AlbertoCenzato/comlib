@@ -7,20 +7,20 @@
 #include <numeric>
 #include <iostream>
 
-using Buffer = std::queue<uint8_t>;
+void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& data);
+void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data);
 
-void send(Buffer* send_queue, Buffer* receive_queue, const std::vector<int>& data);
-void receive(Buffer* send_queue, Buffer* receive_queue, std::vector<int>& data);
+constexpr int QUEUE_SIZE = 111111;
 
 int main() {
   std::vector<int> send_queue, receive_queue;
-  send_queue.resize(501);
+  send_queue.resize(QUEUE_SIZE);
   std::iota(send_queue.begin(), send_queue.end(), 0);
 
   {
-    Buffer buffer_a, buffer_b;
-    std::thread send_thread{ send, &buffer_a, &buffer_b, std::cref(send_queue) };
-    std::thread receive_thread{ receive, &buffer_b, &buffer_a, std::ref(receive_queue) };
+    com::test::ThreadsafeLoopbackSocket socket;
+    std::thread send_thread{ send, std::ref(socket), std::cref(send_queue) };
+    std::thread receive_thread{ receive, std::ref(socket), std::ref(receive_queue) };
 
     send_thread.join();
     receive_thread.join();
@@ -31,50 +31,78 @@ int main() {
     std::cout << n << std::endl;
   }
 
+  int x;
+  std::cin >> x;
+
   return 0;
 }
 
-void send(Buffer* send_queue, Buffer* receive_queue, const std::vector<int>& data) {
-  com::test::MockMessageSocket socket{ send_queue, receive_queue };
+void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& data) {
   com::MessageConveyor conveyor{ &socket };
-
   conveyor.connect();
   
   for (int n : data) {
-    com::MoveMessage m;
-    m.x = n;
-    bool success = conveyor.send(m);
+    bool success = false;
+    int r = std::rand();
+    switch (r % 1) {
+    case 0:
+      com::MoveMessage move_message;
+      move_message.x = n;
+      success = conveyor.send(move_message);
+      break;
+    case 1:
+      com::Int32Message int32_message;
+      int32_message.value = n;
+      success = conveyor.send(int32_message);
+      break;
+    case 2:
+      com::EmptyMessage empty_message;
+      success = conveyor.send(empty_message);
+      break;
+    }
+
     if (!success) {
       std::cout << "Send error" << std::endl;
     }
     else {
       std::cout << "Sent: " << n << std::endl;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   conveyor.disconnect();
 }
 
-void receive(Buffer* send_queue, Buffer* receive_queue, std::vector<int>& data) {
-  com::test::MockMessageSocket socket{ send_queue, receive_queue };
+void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data) {
   com::MessageConveyor conveyor{ &socket };
-
   conveyor.connect();
 
   int n = -1;
-  while (n < 500) {
+  while (n < (QUEUE_SIZE - 1)) {
     auto message = conveyor.processIncomingMessage();
     if (message) {
-      n = message.value().message.move.x;
-      data.push_back(n);
-      std::cout << "received:" << n << std::endl;
+      const com::MessageType type = message.value().type;
+      std::cout << com::to_string(type) << " received" << std::endl;
+      switch (type) {
+      case com::MessageType::EMPTY_MESSAGE:
+        break;
+      case com::MessageType::INT32_MESSAGE:
+        n = message.value().message.int32.value;
+        std::cout << "value: " << n << std::endl;
+        data.push_back(n);
+        break;
+      case com::MessageType::MOVE_MESSAGE:
+        n = message.value().message.move.x;
+        std::cout << "x: " << n << std::endl;
+        data.push_back(n);
+        break;
+      }
     }
     else {
       std::cout << "Waiting for message completion" << std::endl;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 
   conveyor.disconnect();
