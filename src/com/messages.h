@@ -5,14 +5,10 @@
 namespace com {
 
 enum class MessageType : int16_t {
-  ERROR = -1,
-  ACK = 0,
-  NACK = 1,
-  LOG = 2,
-  MOVE_MESSAGE = 3,
-  BINARY_MESSAGE = 4,
-  EMPTY_MESSAGE = 5,
-  INT32_MESSAGE = 6
+  MOVE_MESSAGE,
+  BINARY_MESSAGE,
+  EMPTY_MESSAGE,
+  INT32_MESSAGE
 };
 
 
