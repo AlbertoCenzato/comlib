@@ -31,11 +31,8 @@ inline std::string to_string(MessageType message_type)
 {
   switch (message_type)
   {
-  case MessageType::ERROR: return "ERROR";
-  case MessageType::ACK:   return "ACK";
-  case MessageType::NACK:  return "NACK";
+  case MessageType::BINARY_MESSAGE: return "BINARY_MESSAGE";
   case MessageType::EMPTY_MESSAGE:  return "EMPTY_MESSAGE";
-  case MessageType::LOG:   return "LOG";
   case MessageType::MOVE_MESSAGE: return "MOVE_MESSAGE";
   case MessageType::INT32_MESSAGE: return "INT32_MESSAGE";
   }
