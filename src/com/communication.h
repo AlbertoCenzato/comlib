@@ -86,7 +86,7 @@ public:
     if (!is_complete_message)
       return {};
 
-    const uint8_t* message_begin = receive_buffer + sizeof(size_t);
+    const uint8_t* message_begin = receive_buffer + sizeof(uint32_t);
     Message message;
     bufferToMessage(message_begin, message);
     return message;
