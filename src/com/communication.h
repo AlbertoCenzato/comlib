@@ -97,11 +97,6 @@ public:
     //}
   }
 
-  void bufferToMessage(const uint8_t* buffer, Message& message) {
-    MessageType type;
-    buffer = deserialize(buffer, type);
-    internal::fillMessage(message, type, buffer);
-  }
 
 
   /*
@@ -132,6 +127,12 @@ private:
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
   //std::map<MessageType, std::vector<Callback>> callback_registry;
+
+  void bufferToMessage(const uint8_t* buffer, Message& message) {
+    MessageType type;
+    buffer = deserialize(buffer, type);
+    internal::fillMessage(message, type, buffer);
+  }
 };
 
 
