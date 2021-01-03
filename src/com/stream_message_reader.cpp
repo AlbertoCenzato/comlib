@@ -19,8 +19,8 @@ bool StreamMessageReader::processIncomingBytes(IMessageSocket& socket, uint8_t* 
     buffer_should_be_compacted = false;
   }
 
-  uint32_t new_bytes = socket.receive(buffer + bytes_received);
-  uint32_t new_bytes = socket.receive(buffer + bytes_received, buffer_size);
+  const uint32_t bytes_to_read = buffer_size - bytes_received;
+  uint32_t new_bytes = socket.receive(buffer + bytes_received, bytes_to_read);
   if (new_bytes <= 0)
     return false;
 
