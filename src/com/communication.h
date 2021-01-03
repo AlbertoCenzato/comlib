@@ -132,6 +132,12 @@ private:
   void bufferToMessage(const uint8_t* buffer, Message& message) {
     MessageType type;
     buffer = deserialize(buffer, type);
+    if (!buffer) {
+      std::cerr << "com::MessageType deserialization failed! It is likely that " 
+                << "the reading stream is not properly aligned with incoming messages. "
+                << "It can happen if the underlying socket has dropped some bytes." << std::endl;
+      // TODO(cenz): deal with synchronization issues
+    }
     internal::fillMessage(message, type, buffer);
   }
 };
