@@ -7,6 +7,7 @@
 #include <functional>
 #include <chrono>
 #include <iostream>
+#include <cassert>
 
 namespace com {
 
@@ -64,6 +65,12 @@ void profileTime(const char* name, std::function<void()> func);
 
 void shiftBytesLeft(uint8_t* array, size_t length, size_t shift);
 void shiftBytesRight(uint8_t* array, size_t length, size_t shift);
+
+template <class T>
+bool isInRange(const T& value, const T& min, const T& max) {
+  assert(min <= max);
+  return min <= value && value <= max;
+}
 
 }  // namespace utils
 
