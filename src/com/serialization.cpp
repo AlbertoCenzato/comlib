@@ -24,7 +24,10 @@ const uint8_t* deserialize<float>(const uint8_t* data, float& value) {
 
 template<> inline
 const uint8_t* deserialize<MessageType>(const uint8_t* data, MessageType& value) {
-  return deserialize(data, reinterpret_cast<std::underlying_type_t<MessageType>&>(value));
+  auto data_ptr = deserialize(data, reinterpret_cast<std::underlying_type_t<MessageType>&>(value));
+  if (utils::isInRange(value, MessageType::MOVE_MESSAGE, MessageType::INT32_MESSAGE))
+    return data_ptr;
+  return nullptr;
 }
 
 template<> inline
