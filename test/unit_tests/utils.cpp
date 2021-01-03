@@ -8,15 +8,15 @@ using namespace com;
 
 TEST(endianness, isLittleEndian)
 {
-  std::uint16_t n = 1;
-  bool runtime_check = *(reinterpret_cast<std::uint8_t*>(&n)) == 1;
+  uint16_t n = 1;
+  bool runtime_check = *(reinterpret_cast<uint8_t*>(&n)) == 1;
   EXPECT_EQ(runtime_check, utils::isLittleEndian());
 }
 
 TEST(reverseMemcpy, reverseMemcpy)
 {
-  std::int8_t src[100];
-  std::int8_t dest[100];
+  int8_t src[100];
+  int8_t dest[100];
 
   std::iota(src, src + 100, 1);
   utils::reverseMemcpy(dest, src, 100);
