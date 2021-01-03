@@ -19,14 +19,6 @@ public:
   virtual uint32_t receive(void* data, uint32_t bytes) = 0;
 };
 
-enum class ConnectionStatus {
-  CONNECTING,
-  CONNECTED,
-  DISCONNECTED,
-  ERROR
-};
-
-
 inline std::string to_string(MessageType message_type)
 {
   switch (message_type)
