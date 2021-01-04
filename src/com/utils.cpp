@@ -33,11 +33,11 @@ void bigEndianCopy(void* dest, const void* src, size_t len)
 }
 
 void profileTime(const char* name, std::function<void()> func) {
-  auto start = std::chrono::steady_clock::now();
+  /*auto start = std::chrono::steady_clock::now();
   func();
   auto end = std::chrono::steady_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-  std::cout << "Profiling " << name << ": " << elapsed << "ms" << std::endl;
+  std::cout << "Profiling " << name << ": " << elapsed << "ms" << std::endl;*/
 }
 
 void shiftBytesLeft(uint8_t* array, size_t length, size_t shift) {

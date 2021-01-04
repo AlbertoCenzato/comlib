@@ -4,7 +4,6 @@
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"
-#include <chrono>
 #include <map>
 #include <vector>
 
@@ -99,21 +98,6 @@ public:
     callback_registry[type].push_back(callback);
   }
   */
-
-  /*std::chrono::microseconds ping() {
-    auto start = std::chrono::steady_clock::now();
-    
-    bool success = send(EmptyMessage{});
-    if (!success)
-      return std::chrono::microseconds{-1};
-    Message reply;
-    receive(reply);
-    if (reply.type != MessageType::EMPTY_MESSAGE)
-      return std::chrono::microseconds{ -1 };
-
-    auto end = std::chrono::steady_clock::now();
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-  }*/
 
 private:
   uint8_t send_buffer[BUFFER_SIZE];
