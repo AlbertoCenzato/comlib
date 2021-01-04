@@ -22,3 +22,7 @@
 #undef LITTLE_ENDIAN  // TODO(cenz): fix this
 #define LITTLE_ENDIAN true
 #endif
+
+#if ARDUINO_AVR_UNO
+#include <Arduino.h>
+#endif
