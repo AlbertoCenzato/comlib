@@ -94,19 +94,20 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
   conveyor.connect();
 
   int n = -1;
+  com::Message message;
   while (n < (QUEUE_SIZE - 1)) {
-    auto message = conveyor.processIncomingMessage();
-    if (message) {
-      const com::MessageType type = message.value().type;
+    bool has_message = conveyor.processIncomingMessage(message);
+    if (has_message) {
+      const com::MessageType type = message.type;
       switch (type) {
       case com::MessageType::EMPTY_MESSAGE:
         break;
       case com::MessageType::INT32_MESSAGE:
-        n = message.value().message.int32.value;
+        n = message.message.int32.value;
         data.push_back(n);
         break;
       case com::MessageType::MOVE_MESSAGE:
-        n = message.value().message.move.x;
+        n = message.message.move.x;
         data.push_back(n);
         break;
       }

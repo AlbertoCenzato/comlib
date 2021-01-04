@@ -36,18 +36,19 @@ TEST(MessageConveyor, sendInt32Message) {
 
 TEST(MessageConveyor, sendReceiveInt32Message) {
   test::LoopbackMockMessageSocket socket;
-  MessageConveyor<256> converyor{ &socket };
+  MessageConveyor<256> conveyor{ &socket };
 
   const int32_t payload = 0x01234567;
   Int32Message message_sent{ payload };
-  converyor.send(message_sent);
+  conveyor.send(message_sent);
 
-  std::optional<Message> message_opt = converyor.processIncomingMessage();
+  Message message;
+  bool has_message = conveyor.processIncomingMessage(message);
 
-  EXPECT_TRUE(message_opt.has_value());
-  EXPECT_EQ(message_opt.value().type, MessageType::INT32_MESSAGE);
+  EXPECT_TRUE(has_message);
+  EXPECT_EQ(message.type, MessageType::INT32_MESSAGE);
   
-  Int32Message& message_received = message_opt.value().message.int32;
+  Int32Message& message_received = message.message.int32;
   EXPECT_EQ(message_received.value, payload);
 }
 
@@ -58,11 +59,12 @@ TEST(MessageConveyor, sendReceiveMoveMessage) {
   MoveMessage message_sent{ 1.f, 0.f, 0.5f };
   conveyor.send(message_sent);
 
-  std::optional<Message> message_opt = conveyor.processIncomingMessage();
-  EXPECT_TRUE(message_opt.has_value());
-  EXPECT_EQ(message_opt.value().type, MessageType::MOVE_MESSAGE);
+  Message message;
+  bool has_message = conveyor.processIncomingMessage(message);
+  EXPECT_TRUE(has_message);
+  EXPECT_EQ(message.type, MessageType::MOVE_MESSAGE);
 
-  MoveMessage& message_received = message_opt.value().message.move;
+  MoveMessage& message_received = message.message.move;
   EXPECT_EQ(message_received.x, 1.f);
   EXPECT_EQ(message_received.y, 0.f);
   EXPECT_EQ(message_received.rot, 0.5f);

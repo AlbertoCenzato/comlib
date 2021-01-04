@@ -7,7 +7,6 @@
 #include <chrono>
 #include <map>
 #include <vector>
-#include <optional>
 
 namespace com {
 
@@ -75,18 +74,17 @@ public:
   //  internal::fillMessage(message, type, data_buffer);
   //}
 
-  std::optional<Message> processIncomingMessage() {
+  bool processIncomingMessage(Message& message) {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
     bool is_complete_message = 
       stream_reader.processIncomingBytes(*socket, receive_buffer, BUFFER_SIZE);
     if (!is_complete_message)
-      return {};
+      return false;
 
     const uint8_t* message_begin = receive_buffer + sizeof(uint32_t);
-    Message message;
     bufferToMessage(message_begin, message);
-    return message;
+    return true;
     // TODO(cenz): dispatch message with the correct type
     //auto& callbacks = callback_registry[message.type];
     //for (auto& callback : callbacks) {
