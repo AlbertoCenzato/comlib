@@ -2,11 +2,14 @@
 
 #include "messages.h"
 
-#include <cstddef>
-#include <cstdint>
+#ifdef ARDUINO_AVR_UNO
+#include "String.h"
+using String = String;
+#else
 #include <string>
-#include <ostream>
-
+using String = std::string;
+#endif
+//#include <ostream>
 
 namespace com {
 
@@ -19,7 +22,7 @@ public:
   virtual uint32_t receive(void* data, uint32_t bytes) = 0;
 };
 
-inline std::string to_string(MessageType message_type)
+inline String to_string(MessageType message_type)
 {
   switch (message_type)
   {
@@ -30,12 +33,6 @@ inline std::string to_string(MessageType message_type)
   }
 
   return "UNKNOWN_VALUE";
-}
-
-inline std::ostream& operator << (std::ostream& os, MessageType message_type)
-{
-  os << to_string(message_type);
-  return os;
 }
 
 }
