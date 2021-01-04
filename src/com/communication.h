@@ -4,8 +4,6 @@
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"
-#include <map>
-#include <vector>
 
 namespace com {
 
@@ -105,7 +103,6 @@ private:
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
-  //std::map<MessageType, std::vector<Callback>> callback_registry;
 
   void bufferToMessage(const uint8_t* buffer, Message& message) {
     MessageType type;
