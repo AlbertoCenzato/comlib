@@ -24,11 +24,20 @@ int main() {
 
     send_thread.join();
     receive_thread.join();
+  std::cout << "Test finished." << std::endl;
+  bool passed = true;
+  for (size_t i = 0; i < send_queue.size() - 1; i++) {
+    if (send_queue[i] != receive_queue[i]) {
+      passed = false;
+      break;
+    }
   }
 
-  std::cout << "Data received: " << std::endl;
-  for (int n : receive_queue) {
-    std::cout << n << std::endl;
+  if (passed) {
+    std::cout << "Test passed." << std::endl;
+  }
+  else {
+    std::cout << "Test failed." << std::endl;
   }
 
   int x;
