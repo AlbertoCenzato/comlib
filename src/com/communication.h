@@ -4,6 +4,7 @@
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"
+#include <string.h>
 
 namespace com {
 
