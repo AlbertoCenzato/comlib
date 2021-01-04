@@ -3,8 +3,16 @@
 project ("comlib")
 
 file (GLOB_RECURSE SRC src/com/*.cpp) 
-add_library(comlib ${SRC})
+file (GLOB_RECURSE HEADERS src/com/*.h)
 
+if (ARDUINO)
+	message("Sto compilando per arduino")
+	file (COPY ${SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
+	file (COPY ${HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
+	return()
+endif (ARDUINO)
+
+add_library(comlib ${SRC})
 target_include_directories(comlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if (MSVC)
