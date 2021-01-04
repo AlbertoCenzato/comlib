@@ -25,4 +25,6 @@
 
 #if ARDUINO_AVR_UNO
 #include <Arduino.h>
+#else
+#include <cstdint>
 #endif
