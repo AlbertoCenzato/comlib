@@ -1,5 +1,6 @@
 #pragma once
 
+#include "macros.h"
 #include <cstdint>
 
 namespace com {
@@ -10,7 +11,6 @@ enum class MessageType : int16_t {
   EMPTY_MESSAGE,
   INT32_MESSAGE
 };
-
 
 struct BinaryMessage {
   uint32_t payload_length;
@@ -34,25 +34,25 @@ struct Int32Message {
 };
 
 template <class T>
-constexpr MessageType getMessageType();
+_constexpr MessageType getMessageType();
 
 template <>
-constexpr MessageType getMessageType<BinaryMessage>() {
+_constexpr MessageType getMessageType<BinaryMessage>() {
   return MessageType::BINARY_MESSAGE;
 }
 
 template <>
-constexpr MessageType getMessageType<MoveMessage>() {
+_constexpr MessageType getMessageType<MoveMessage>() {
   return MessageType::MOVE_MESSAGE;
 }
 
 template <>
-constexpr MessageType getMessageType<EmptyMessage>() {
+_constexpr MessageType getMessageType<EmptyMessage>() {
   return MessageType::EMPTY_MESSAGE;
 }
 
 template <>
-constexpr MessageType getMessageType<Int32Message>() {
+_constexpr MessageType getMessageType<Int32Message>() {
   return MessageType::INT32_MESSAGE;
 }
 
