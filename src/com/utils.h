@@ -8,7 +8,7 @@ namespace com {
 
 namespace utils {
 
-_constexpr bool isLittleEndian() {
+constexpr bool isLittleEndian() {
   return LITTLE_ENDIAN;
 }
 

@@ -18,7 +18,7 @@ void* reverseMemcpy(void* _restrict dest, const void* _restrict source, size_t l
 
 void littleEndianCopy(void* dest, const void* src, size_t len)
 {
-  if _constexpr(isLittleEndian())
+  if constexpr(isLittleEndian())
     memcpy(dest, src, len);
   else
     reverseMemcpy(dest, src, len);
@@ -26,7 +26,7 @@ void littleEndianCopy(void* dest, const void* src, size_t len)
 
 void bigEndianCopy(void* dest, const void* src, size_t len)
 {
-  if _constexpr(isLittleEndian())
+  if constexpr(isLittleEndian())
     reverseMemcpy(dest, src, len);
   else
     memcpy(dest, src, len);

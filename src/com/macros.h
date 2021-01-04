@@ -8,12 +8,6 @@
 #define _restrict __restrict__
 #endif
 
-#if ARDUINO_AVR_UNO
-#define _constexpr 
-#else
-#define _constexpr constexpr
-#endif
-
 #if _MSC_VER
 #define LITTLE_ENDIAN true
 #elif ARDUINO_AVR_UNO
