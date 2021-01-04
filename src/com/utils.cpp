@@ -1,7 +1,7 @@
 #include "utils.h"
 #include "messages.h"
 
-#include <cstdint>
+#include <string.h>
 
 namespace com {
 
