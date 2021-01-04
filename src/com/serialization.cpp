@@ -1,6 +1,7 @@
 #include "serialization.h"
 #include "messages.h"
 
+#include <string.h>
 
 namespace com {
 
