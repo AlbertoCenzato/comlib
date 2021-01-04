@@ -60,7 +60,7 @@ T fromUBytesArray(const uint8_t* data) {
   return *reinterpret_cast<const T*>(data);
 }
 
-void profileTime(const char* name, std::function<void()> func);
+void profileTime(const char* name, void(*func)());
 
 void shiftBytesLeft(uint8_t* array, size_t length, size_t shift);
 void shiftBytesRight(uint8_t* array, size_t length, size_t shift);
