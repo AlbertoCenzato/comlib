@@ -61,13 +61,14 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
       break;
     }
 
+    /*
     if (!success) {
       std::cout << "Send error" << std::endl;
     }
-    else {
+    else if (n % 1000 == 0) {
       std::cout << "Sent: " << n << std::endl;
     }
-    //std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    */
   }
 
   conveyor.disconnect();
@@ -82,27 +83,28 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
     auto message = conveyor.processIncomingMessage();
     if (message) {
       const com::MessageType type = message.value().type;
-      std::cout << com::to_string(type) << " received" << std::endl;
       switch (type) {
       case com::MessageType::EMPTY_MESSAGE:
         break;
       case com::MessageType::INT32_MESSAGE:
         n = message.value().message.int32.value;
-        std::cout << "value: " << n << std::endl;
         data.push_back(n);
         break;
       case com::MessageType::MOVE_MESSAGE:
         n = message.value().message.move.x;
-        std::cout << "x: " << n << std::endl;
         data.push_back(n);
         break;
       }
     }
+    /*
     else {
       std::cout << "Waiting for message completion" << std::endl;
     }
 
-    //std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    if (n % 1000 == 0) {
+      std::cout << "Received: " << n << std::endl;
+    }
+    */
   }
 
   conveyor.disconnect();
