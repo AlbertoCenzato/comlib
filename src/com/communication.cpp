@@ -5,7 +5,7 @@ namespace com {
 
 namespace internal {
 
-void fillMessage(Message& message, MessageType type, const std::uint8_t* data) {
+void fillMessage(Message& message, MessageType type, const uint8_t* data) {
   message.type = type;
   switch (type)
   {
