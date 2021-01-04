@@ -53,7 +53,7 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
   for (int n : data) {
     bool success = false;
     int r = std::rand();
-    switch (r % 1) {
+    switch (r % 2) {
     case 0:
       com::MoveMessage move_message;
       move_message.x = n;
