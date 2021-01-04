@@ -6,7 +6,7 @@ namespace com {
 
 template <> inline
 uint8_t* serialize<MessageType>(const MessageType& type, uint8_t* buffer) {
-  return serialize(static_cast<std::underlying_type_t<MessageType>>(type), buffer);
+  return serialize(static_cast<int16_t>(type), buffer);  // TODO(cenz): use an arduino-compatible std::underlying_type to avoid type errors
 }
 
 template <> inline
@@ -24,7 +24,7 @@ const uint8_t* deserialize<float>(const uint8_t* data, float& value) {
 
 template<> inline
 const uint8_t* deserialize<MessageType>(const uint8_t* data, MessageType& value) {
-  auto data_ptr = deserialize(data, reinterpret_cast<std::underlying_type_t<MessageType>&>(value));
+  auto data_ptr = deserialize(data, reinterpret_cast<int16_t&>(value));  // TODO(cenz): use an arduino-compatible std::underlying_type to avoid type errors
   if (utils::isInRange(value, MessageType::MOVE_MESSAGE, MessageType::INT32_MESSAGE))
     return data_ptr;
   return nullptr;
