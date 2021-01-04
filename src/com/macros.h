@@ -21,4 +21,5 @@
 #include <Arduino.h>
 #else
 #include <cstdint>
+#include <cstddef>
 #endif
