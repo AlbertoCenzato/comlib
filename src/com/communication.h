@@ -31,10 +31,7 @@ public:
   void disconnect() { return socket->disconnect(); }
 
   bool send(const BinaryMessage& message) {
-    uint32_t message_length = 
-      sizeof(MessageType) + 
-      sizeof(message.payload_length) + 
-      message.payload_length;
+    uint32_t message_length = sizeof(MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<BinaryMessage>(), data_buffer);
     data_buffer = serialize(message.payload_length, data_buffer);
@@ -44,8 +41,7 @@ public:
   }
   
   bool send(const MoveMessage& message) {
-    uint32_t message_length = sizeof(MessageType) + sizeof(message);
-
+    uint32_t message_length = sizeof(MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<MoveMessage>(), data_buffer);
     data_buffer = serialize(message.x, data_buffer);
@@ -56,7 +52,7 @@ public:
   }
 
   bool send(const EmptyMessage& message) {
-    uint32_t message_length = sizeof(MessageType);
+    uint32_t message_length = sizeof(MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<EmptyMessage>(), data_buffer);
 
@@ -64,7 +60,7 @@ public:
   }
 
   bool send(const Int32Message& message) {
-    uint32_t message_length = sizeof(MessageType) + sizeof(message);
+    uint32_t message_length = sizeof(MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(getMessageType<Int32Message>(), data_buffer);
     data_buffer = serialize(message.value, data_buffer);

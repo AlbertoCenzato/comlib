@@ -18,19 +18,26 @@ struct BinaryMessage {
 
   void mallocAndSet(uint32_t payload_length, const uint8_t* payload);
   void freeMemory();
+
+  uint32_t size() const;
 };
 
 struct MoveMessage {
   float x;
   float y;
   float rot;
+
+  uint32_t size() const;
 };
 
 struct EmptyMessage {
+  uint32_t size() const;
 };
 
 struct Int32Message {
   int32_t value;
+
+  uint32_t size() const;
 };
 
 template <class T>
