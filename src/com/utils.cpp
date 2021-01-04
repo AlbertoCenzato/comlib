@@ -32,7 +32,7 @@ void bigEndianCopy(void* dest, const void* src, size_t len)
     memcpy(dest, src, len);
 }
 
-void profileTime(const char* name, std::function<void()> func) {
+void profileTime(const char* name, void(*func)()) {
   /*auto start = std::chrono::steady_clock::now();
   func();
   auto end = std::chrono::steady_clock::now();
