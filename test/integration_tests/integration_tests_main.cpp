@@ -1,6 +1,7 @@
 #include "mocks/mock_message_socket.h"
 
 #include <com/communication.h>
+#include <com/utils.h>
 
 #include <thread>
 #include <vector>
@@ -10,20 +11,25 @@
 void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& data);
 void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data);
 
-constexpr int QUEUE_SIZE = 111111;
+constexpr int QUEUE_SIZE = 1000000;
 
 int main() {
   std::vector<int> send_queue, receive_queue;
   send_queue.resize(QUEUE_SIZE);
   std::iota(send_queue.begin(), send_queue.end(), 0);
 
-  {
-    com::test::ThreadsafeLoopbackSocket socket;
-    std::thread send_thread{ send, std::ref(socket), std::cref(send_queue) };
-    std::thread receive_thread{ receive, std::ref(socket), std::ref(receive_queue) };
+  com::utils::profileTime("Transmission time", 
+    [&]() {
+      com::test::ThreadsafeLoopbackSocket socket;
+      std::thread send_thread{ send, std::ref(socket), std::cref(send_queue) };
+      std::thread receive_thread{ receive, std::ref(socket), std::ref(receive_queue) };
 
-    send_thread.join();
-    receive_thread.join();
+      send_thread.join();
+      receive_thread.join();
+      return;
+    }
+  );
+
   std::cout << "Test finished." << std::endl;
   bool passed = true;
   for (size_t i = 0; i < send_queue.size() - 1; i++) {
