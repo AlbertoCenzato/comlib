@@ -19,6 +19,22 @@
 
 #if ARDUINO_AVR_UNO
 #include <Arduino.h>
+
+constexpr int LED = 13;
+
+inline void blink(int ms) {
+  digitalWrite(LED, HIGH);
+  delay(ms);
+  digitalWrite(LED, LOW);
+  delay(ms);
+}
+
+inline void toBlinkCoding(uint32_t value) {
+  for (uint32_t i = 0; i < value; ++i) {
+    blink(500);
+  }
+}
+
 #else
 #include <cstdint>
 #include <cstddef>
