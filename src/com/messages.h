@@ -1,7 +1,6 @@
 #pragma once
 
 #include "macros.h"
-#include <cstdint>
 
 namespace com {
 
@@ -41,25 +40,25 @@ struct Int32Message {
 };
 
 template <class T>
-_constexpr MessageType getMessageType();
+constexpr MessageType getMessageType();
 
 template <>
-_constexpr MessageType getMessageType<BinaryMessage>() {
+constexpr MessageType getMessageType<BinaryMessage>() {
   return MessageType::BINARY_MESSAGE;
 }
 
 template <>
-_constexpr MessageType getMessageType<MoveMessage>() {
+constexpr MessageType getMessageType<MoveMessage>() {
   return MessageType::MOVE_MESSAGE;
 }
 
 template <>
-_constexpr MessageType getMessageType<EmptyMessage>() {
+constexpr MessageType getMessageType<EmptyMessage>() {
   return MessageType::EMPTY_MESSAGE;
 }
 
 template <>
-_constexpr MessageType getMessageType<Int32Message>() {
+constexpr MessageType getMessageType<Int32Message>() {
   return MessageType::INT32_MESSAGE;
 }
 

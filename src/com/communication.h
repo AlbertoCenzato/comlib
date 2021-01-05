@@ -4,10 +4,7 @@
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"
-#include <chrono>
-#include <map>
-#include <vector>
-#include <optional>
+#include <string.h>
 
 namespace com {
 
@@ -75,18 +72,17 @@ public:
   //  internal::fillMessage(message, type, data_buffer);
   //}
 
-  std::optional<Message> processIncomingMessage() {
+  bool processIncomingMessage(Message& message) {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
     bool is_complete_message = 
       stream_reader.processIncomingBytes(*socket, receive_buffer, BUFFER_SIZE);
     if (!is_complete_message)
-      return {};
+      return false;
 
     const uint8_t* message_begin = receive_buffer + sizeof(uint32_t);
-    Message message;
     bufferToMessage(message_begin, message);
-    return message;
+    return true;
     // TODO(cenz): dispatch message with the correct type
     //auto& callbacks = callback_registry[message.type];
     //for (auto& callback : callbacks) {
@@ -102,37 +98,21 @@ public:
   }
   */
 
-  /*std::chrono::microseconds ping() {
-    auto start = std::chrono::steady_clock::now();
-    
-    bool success = send(EmptyMessage{});
-    if (!success)
-      return std::chrono::microseconds{-1};
-    Message reply;
-    receive(reply);
-    if (reply.type != MessageType::EMPTY_MESSAGE)
-      return std::chrono::microseconds{ -1 };
-
-    auto end = std::chrono::steady_clock::now();
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-  }*/
-
 private:
   uint8_t send_buffer[BUFFER_SIZE];
   uint8_t receive_buffer[BUFFER_SIZE];
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
-  //std::map<MessageType, std::vector<Callback>> callback_registry;
 
   void bufferToMessage(const uint8_t* buffer, Message& message) {
     MessageType type;
     buffer = deserialize(buffer, type);
     if (!buffer) {
-      std::cerr << "com::MessageType deserialization failed! It is likely that " 
-                << "the reading stream is not properly aligned with incoming messages. "
-                << "It can happen if the underlying socket has dropped some bytes." << std::endl;
       // TODO(cenz): deal with synchronization issues
+      // com::MessageType deserialization failed! It is likely that
+      // the reading stream is not properly aligned with incoming messages.
+      // It can happen if the underlying socket has dropped some bytes.
     }
     internal::fillMessage(message, type, buffer);
   }
