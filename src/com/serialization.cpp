@@ -32,14 +32,6 @@ const uint8_t* deserialize<MessageType>(const uint8_t* data, MessageType& value)
 }
 
 template<> inline
-const uint8_t* deserialize<BinaryMessage>(const uint8_t* data, BinaryMessage& message) {
-  uint32_t payload_length;
-  const uint8_t* payload = deserialize(data, payload_length);
-  message.mallocAndSet(payload_length, payload);
-  return payload + payload_length;
-}
-
-template<> inline
 const uint8_t* deserialize<MoveMessage>(const uint8_t* data, MoveMessage& message) {
   data = deserialize(data, message.x);
   data = deserialize(data, message.y);

@@ -9,9 +9,6 @@ void fillMessage(Message& message, MessageType type, const uint8_t* data) {
   message.type = type;
   switch (type)
   {
-  case MessageType::BINARY_MESSAGE:
-    deserialize<BinaryMessage>(data, message.message.binary);
-    break;
   case MessageType::MOVE_MESSAGE:
     deserialize<MoveMessage>(data, message.message.move);
     break;

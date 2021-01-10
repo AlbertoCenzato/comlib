@@ -27,17 +27,7 @@ public:
 
   bool connect() { return socket->connect(); }
   void disconnect() { return socket->disconnect(); }
-
-  bool send(const BinaryMessage& message) {
-    uint32_t message_length = sizeof(MessageType) + message.size();
-    uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<BinaryMessage>(), data_buffer);
-    data_buffer = serialize(message.payload_length, data_buffer);
-    memcpy(data_buffer, message.payload, message.payload_length);
-
-    return socket->send(send_buffer, sizeof(message_length) + message_length);
-  }
-  
+    
   bool send(const MoveMessage& message) {
     uint32_t message_length = sizeof(MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
