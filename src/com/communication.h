@@ -23,7 +23,7 @@ public:
   using Callback = void(*)(const msg::Message&);
 
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
-  ~MessageConveyor() = default;  // TODO(cenz): disconnect on destruction
+  ~MessageConveyor() = default;
 
   bool connect() { return socket->connect(); }
   void disconnect() { return socket->disconnect(); }
