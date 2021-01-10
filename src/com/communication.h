@@ -1,6 +1,7 @@
 #pragma once
 
 #include "communication_interface.h"
+#include "messages.h"
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"

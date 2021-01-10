@@ -2,6 +2,15 @@
 
 #include "macros.h"
 
+#ifdef ARDUINO_AVR_UNO
+#include "String.h"
+using String = String;
+#else
+#include <string>
+using String = std::string;
+#endif
+
+
 namespace com {
 
 enum class MessageType : int16_t {
@@ -20,6 +29,18 @@ struct BinaryMessage {
 
   uint32_t size() const;
 };
+inline String to_string(MessageType message_type)
+{
+  switch (message_type)
+  {
+  case MessageType::BINARY_MESSAGE:  return "BINARY_MESSAGE";
+  case MessageType::EMPTY_MESSAGE:  return "EMPTY_MESSAGE";
+  case MessageType::MOVE_MESSAGE: return "MOVE_MESSAGE";
+  case MessageType::INT32_MESSAGE: return "INT32_MESSAGE";
+  }
+
+  return "UNKNOWN_VALUE";
+}
 
 struct MoveMessage {
   float x;
