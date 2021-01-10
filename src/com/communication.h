@@ -27,41 +27,16 @@ public:
 
   bool connect() { return socket->connect(); }
   void disconnect() { return socket->disconnect(); }
-    
-  bool send(const msg::MoveMessage& message) {
-    uint32_t message_length = sizeof(msg::MessageType) + message.size();
+   
+  template <class Msg>
+  bool send(const Msg& message) {
+    uint32_t message_length = sizeof(msg::MessageType) + msg::getSize(message);
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(msg::getMessageType<msg::MoveMessage>(), data_buffer);
-    data_buffer = serialize(message.x, data_buffer);
-    data_buffer = serialize(message.y, data_buffer);
-    data_buffer = serialize(message.rot, data_buffer);
+    data_buffer = serialize(msg::getMessageType<Msg>(), data_buffer);
+    data_buffer = serialize(message, data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
-
-  bool send(const msg::EmptyMessage& message) {
-    uint32_t message_length = sizeof(msg::MessageType) + message.size();
-    uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(msg::getMessageType<msg::EmptyMessage>(), data_buffer);
-
-    return socket->send(send_buffer, sizeof(message_length) + message_length);
-  }
-
-  bool send(const msg::Int32Message& message) {
-    uint32_t message_length = sizeof(msg::MessageType) + message.size();
-    uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(msg::getMessageType<msg::Int32Message>(), data_buffer);
-    data_buffer = serialize(message.value, data_buffer);
-
-    return socket->send(send_buffer, sizeof(message_length) + message_length);
-  }
-
-  //void receive(Message& message) {
-  //  MessageType type;
-  //  size_t message_length = socket->receive(receive_buffer);
-  //  const uint8_t* data_buffer = utils::deserialize(receive_buffer, type);
-  //  internal::fillMessage(message, type, data_buffer);
-  //}
 
   bool processIncomingMessage(msg::Message& message) {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
