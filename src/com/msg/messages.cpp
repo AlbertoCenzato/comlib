@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-namespace com {
+namespace com::msg {
 
 uint32_t MoveMessage::size() const {
   return sizeof(x) + sizeof(y) + sizeof(rot);

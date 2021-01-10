@@ -1,6 +1,6 @@
 #pragma once
 
-#include "macros.h"
+#include "../macros.h"
 
 #ifdef ARDUINO_AVR_UNO
 #include "String.h"
@@ -11,7 +11,7 @@ using String = std::string;
 #endif
 
 
-namespace com {
+namespace com::msg {
 
 enum class MessageType : int16_t {
   MOVE_MESSAGE,

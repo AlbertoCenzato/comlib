@@ -58,17 +58,17 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
     int r = std::rand();
     switch (r % 2) {
     case 0:
-      com::MoveMessage move_message;
+      com::msg::MoveMessage move_message;
       move_message.x = n;
       success = conveyor.send(move_message);
       break;
     case 1:
-      com::Int32Message int32_message;
+      com::msg::Int32Message int32_message;
       int32_message.value = n;
       success = conveyor.send(int32_message);
       break;
     case 2:
-      com::EmptyMessage empty_message;
+      com::msg::EmptyMessage empty_message;
       success = conveyor.send(empty_message);
       break;
     }
@@ -91,19 +91,19 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
   conveyor.connect();
 
   int n = -1;
-  com::Message message;
+  com::msg::Message message;
   while (n < (QUEUE_SIZE - 1)) {
     bool has_message = conveyor.processIncomingMessage(message);
     if (has_message) {
-      const com::MessageType type = message.type;
+      const com::msg::MessageType type = message.type;
       switch (type) {
-      case com::MessageType::EMPTY_MESSAGE:
+      case com::msg::MessageType::EMPTY_MESSAGE:
         break;
-      case com::MessageType::INT32_MESSAGE:
+      case com::msg::MessageType::INT32_MESSAGE:
         n = message.message.int32.value;
         data.push_back(n);
         break;
-      case com::MessageType::MOVE_MESSAGE:
+      case com::msg::MessageType::MOVE_MESSAGE:
         n = message.message.move.x;
         data.push_back(n);
         break;

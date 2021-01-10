@@ -5,18 +5,18 @@ namespace com {
 
 namespace internal {
 
-void fillMessage(Message& message, MessageType type, const uint8_t* data) {
+void fillMessage(msg::Message& message, msg::MessageType type, const uint8_t* data) {
   message.type = type;
   switch (type)
   {
-  case MessageType::MOVE_MESSAGE:
-    deserialize<MoveMessage>(data, message.message.move);
+  case msg::MessageType::MOVE_MESSAGE:
+    deserialize<msg::MoveMessage>(data, message.message.move);
     break;
-  case MessageType::EMPTY_MESSAGE:
-    deserialize<EmptyMessage>(data, message.message.empty);
+  case msg::MessageType::EMPTY_MESSAGE:
+    deserialize<msg::EmptyMessage>(data, message.message.empty);
     break;
-  case MessageType::INT32_MESSAGE:
-    deserialize<Int32Message>(data, message.message.int32);
+  case msg::MessageType::INT32_MESSAGE:
+    deserialize<msg::Int32Message>(data, message.message.int32);
     break;
   }
 }

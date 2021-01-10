@@ -1,7 +1,7 @@
 #pragma once
 
 #include "communication_interface.h"
-#include "messages.h"
+#include "msg/messages.h"
 #include "stream_message_reader.h"
 #include "utils.h"
 #include "serialization.h"
@@ -11,7 +11,7 @@ namespace com {
 
 namespace internal {
 
-void fillMessage(Message& message, MessageType type, const uint8_t* data);
+void fillMessage(msg::Message& message, msg::MessageType type, const uint8_t* data);
 
 }
 
@@ -20,7 +20,7 @@ template <size_t BUFFER_SIZE=256>
 class MessageConveyor
 {
 public:
-  using Callback = void(*)(const Message&);
+  using Callback = void(*)(const msg::Message&);
 
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
   ~MessageConveyor() = default;  // TODO(cenz): disconnect on destruction
@@ -28,10 +28,10 @@ public:
   bool connect() { return socket->connect(); }
   void disconnect() { return socket->disconnect(); }
     
-  bool send(const MoveMessage& message) {
-    uint32_t message_length = sizeof(MessageType) + message.size();
+  bool send(const msg::MoveMessage& message) {
+    uint32_t message_length = sizeof(msg::MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<MoveMessage>(), data_buffer);
+    data_buffer = serialize(msg::getMessageType<msg::MoveMessage>(), data_buffer);
     data_buffer = serialize(message.x, data_buffer);
     data_buffer = serialize(message.y, data_buffer);
     data_buffer = serialize(message.rot, data_buffer);
@@ -39,18 +39,18 @@ public:
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
-  bool send(const EmptyMessage& message) {
-    uint32_t message_length = sizeof(MessageType) + message.size();
+  bool send(const msg::EmptyMessage& message) {
+    uint32_t message_length = sizeof(msg::MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<EmptyMessage>(), data_buffer);
+    data_buffer = serialize(msg::getMessageType<msg::EmptyMessage>(), data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
-  bool send(const Int32Message& message) {
-    uint32_t message_length = sizeof(MessageType) + message.size();
+  bool send(const msg::Int32Message& message) {
+    uint32_t message_length = sizeof(msg::MessageType) + message.size();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
-    data_buffer = serialize(getMessageType<Int32Message>(), data_buffer);
+    data_buffer = serialize(msg::getMessageType<msg::Int32Message>(), data_buffer);
     data_buffer = serialize(message.value, data_buffer);
 
     return socket->send(send_buffer, sizeof(message_length) + message_length);
@@ -63,7 +63,7 @@ public:
   //  internal::fillMessage(message, type, data_buffer);
   //}
 
-  bool processIncomingMessage(Message& message) {
+  bool processIncomingMessage(msg::Message& message) {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
     bool is_complete_message = 
@@ -96,8 +96,8 @@ private:
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
 
-  void bufferToMessage(const uint8_t* buffer, Message& message) {
-    MessageType type;
+  void bufferToMessage(const uint8_t* buffer, msg::Message& message) {
+    msg::MessageType type;
     buffer = deserialize(buffer, type);
     if (!buffer) {
       // TODO(cenz): deal with synchronization issues
