@@ -11,7 +11,7 @@ namespace com {
 
 namespace internal {
 
-void fillMessage(msg::Message& message, msg::MessageType type, const uint8_t* data);
+
 
 }
 
@@ -80,7 +80,7 @@ private:
       // the reading stream is not properly aligned with incoming messages.
       // It can happen if the underlying socket has dropped some bytes.
     }
-    internal::fillMessage(message, type, buffer);
+    msg::fillMessage(message, type, buffer);
   }
 };
 

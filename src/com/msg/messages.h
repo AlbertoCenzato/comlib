@@ -15,4 +15,6 @@ struct Message {
   } message;
 };
 
+void fillMessage(Message& message, MessageType type, const uint8_t* data);
+
 }
