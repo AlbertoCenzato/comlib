@@ -1,20 +1,11 @@
 #pragma once
 
 #include "communication_interface.h"
-#include "msg/messages.h"
 #include "stream_message_reader.h"
-#include "utils.h"
 #include "serialization.h"
-#include <string.h>
+#include "msg/messages.h"
 
 namespace com {
-
-namespace internal {
-
-
-
-}
-
 
 template <size_t BUFFER_SIZE=256>
 class MessageConveyor
@@ -55,8 +46,6 @@ public:
     //  callback(message);
     //}
   }
-
-
 
   /*
   void registerCallback(MessageType type, Callback callback) {
