@@ -8,13 +8,13 @@ void fillMessage(Message& message, MessageType type, const uint8_t* data) {
   switch (type)
   {
   case MessageType::MOVE_MESSAGE:
-    deserialize<MoveMessage>(data, message.message.move);
+    deserialize<MoveMessage>(data, message.message.move_message);
     break;
   case MessageType::EMPTY_MESSAGE:
-    deserialize<EmptyMessage>(data, message.message.empty);
+    deserialize<EmptyMessage>(data, message.message.empty_message);
     break;
   case MessageType::INT32_MESSAGE:
-    deserialize<Int32Message>(data, message.message.int32);
+    deserialize<Int32Message>(data, message.message.int32_message);
     break;
   }
 }

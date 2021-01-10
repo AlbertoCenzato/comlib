@@ -9,9 +9,9 @@ namespace com::msg {
 struct Message {
   MessageType type;
   union {
-    MoveMessage move;
-    EmptyMessage empty;
-    Int32Message int32;
+    MoveMessage move_message;
+    EmptyMessage empty_message;
+    Int32Message int32_message;
   } message;
 };
 

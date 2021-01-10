@@ -100,11 +100,11 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
       case com::msg::MessageType::EMPTY_MESSAGE:
         break;
       case com::msg::MessageType::INT32_MESSAGE:
-        n = message.message.int32.value;
+        n = message.message.int32_message.value;
         data.push_back(n);
         break;
       case com::msg::MessageType::MOVE_MESSAGE:
-        n = message.message.move.x;
+        n = message.message.move_message.x;
         data.push_back(n);
         break;
       }

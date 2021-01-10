@@ -48,7 +48,7 @@ TEST(MessageConveyor, sendReceiveInt32Message) {
   EXPECT_TRUE(has_message);
   EXPECT_EQ(message.type, msg::MessageType::INT32_MESSAGE);
   
-  msg::Int32Message& message_received = message.message.int32;
+  msg::Int32Message& message_received = message.message.int32_message;
   EXPECT_EQ(message_received.value, payload);
 }
 
@@ -64,7 +64,7 @@ TEST(MessageConveyor, sendReceiveMoveMessage) {
   EXPECT_TRUE(has_message);
   EXPECT_EQ(message.type, msg::MessageType::MOVE_MESSAGE);
 
-  msg::MoveMessage& message_received = message.message.move;
+  msg::MoveMessage& message_received = message.message.move_message;
   EXPECT_EQ(message_received.x, 1.f);
   EXPECT_EQ(message_received.y, 0.f);
   EXPECT_EQ(message_received.rot, 0.5f);
