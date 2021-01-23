@@ -1,21 +1,31 @@
 #include "move_message.h"
 #include "../serialization.h"
 
-namespace com {
+namespace com::msg {
 
-template <> inline
-uint8_t* serialize<msg::MoveMessage>(const msg::MoveMessage& msg, uint8_t* buffer) {
-  buffer = serialize(msg.x, buffer);
-  buffer = serialize(msg.y, buffer);
-  buffer = serialize(msg.rot, buffer);
+MoveMessage::MoveMessage(float x, float y, float rot) : x(x), y(y), rot(rot) {}
+
+uint32_t MoveMessage::getSize() const {
+  return sizeof(x) + sizeof(y) + sizeof(rot);
+}
+
+uint16_t MoveMessage::getMessageType() const {
+  return reg.message_type_id;
+}
+
+uint8_t* MoveMessage::serialize(uint8_t* buffer) const {
+  buffer = com::serialize(x, buffer);
+  buffer = com::serialize(y, buffer);
+  buffer = com::serialize(rot, buffer);
   return buffer;
 }
 
-template<> inline
-const uint8_t* deserialize<msg::MoveMessage>(const uint8_t* data, msg::MoveMessage& message) {
-  data = deserialize(data, message.x);
-  data = deserialize(data, message.y);
-  return deserialize(data, message.rot);
+stdx::UPtr<IMessage> MoveMessage::deserialize(const uint8_t* data, const uint8_t** new_data_ptr) {
+  auto message = new MoveMessage{}; 
+  data = com::deserialize(data, message->x);
+  data = com::deserialize(data, message->y);
+  *new_data_ptr = com::deserialize(data, message->rot);
+  return message;  // TODO: variance of return types?
 }
 
 }

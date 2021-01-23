@@ -1,16 +1,24 @@
 #include "empty_message.h"
 #include "../serialization.h"
 
-namespace com {
+namespace com::msg {
 
-template <> inline
-uint8_t* serialize<msg::EmptyMessage>(const msg::EmptyMessage& msg, uint8_t* buffer) {
+uint32_t EmptyMessage::getSize() const {
+	return uint32_t(0);
+}
+
+uint16_t EmptyMessage::getMessageType() const {
+	return reg.message_type_id;
+}
+
+uint8_t* EmptyMessage::serialize(uint8_t* buffer) const {
 	return buffer;
 }
 
-template<> inline
-const uint8_t* deserialize<msg::EmptyMessage>(const uint8_t* data, msg::EmptyMessage& message) {
-	return data;
+stdx::UPtr<IMessage> EmptyMessage::deserialize(const uint8_t* data, const uint8_t** new_data_ptr) {
+	*new_data_ptr = data;
+	return new EmptyMessage{};
 }
+
 
 }

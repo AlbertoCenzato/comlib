@@ -36,8 +36,4 @@ inline String to_string(MessageType message_type)
   return "UNKNOWN_VALUE";
 }
 
-
-template <class T>
-constexpr MessageType getMessageType();
-
 }

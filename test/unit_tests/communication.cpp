@@ -1,6 +1,8 @@
 #include "mocks/mock_message_socket.h"
 
 #include <com/communication.h>
+#include <com/msg/int32_message.h>
+#include <com/msg/move_message.h>
 
 #include <gtest/gtest.h>
 
@@ -20,17 +22,17 @@ TEST(MessageConveyor, sendInt32Message) {
   uint32_t bytes_received = socket.receive(receive_buffer, BUFFER_SIZE);
 
   //                                            = message length bytes + message type bytes + message bytes
-  const uint32_t expected_message_size_in_bytes = sizeof(uint32_t) + sizeof(int16_t) + sizeof(msg::Int32Message);
+  const uint32_t expected_message_size_in_bytes = sizeof(uint32_t) + sizeof(int16_t) + message_sent.getSize();
   EXPECT_EQ(bytes_received, expected_message_size_in_bytes);
 
   uint32_t message_length;
-  msg::MessageType message_type;
+  uint16_t message_type;
   int32_t received_payload;
   auto buff_ptr = deserialize<uint32_t>(receive_buffer, message_length);
-  buff_ptr = deserialize<msg::MessageType>(buff_ptr, message_type);
+  buff_ptr = deserialize<uint16_t>(buff_ptr, message_type);
   deserialize<int32_t>(buff_ptr, received_payload);
-  EXPECT_EQ(sizeof(msg::Int32Message) + sizeof(msg::MessageType), message_length);
-  EXPECT_EQ(msg::getMessageType<msg::Int32Message>(), message_type);
+  EXPECT_EQ(message_sent.getSize() + sizeof(msg::MessageType), message_length);
+  EXPECT_EQ(message_sent.getMessageType(), message_type);
   EXPECT_EQ(payload, received_payload);
 }
 
@@ -42,13 +44,11 @@ TEST(MessageConveyor, sendReceiveInt32Message) {
   msg::Int32Message message_sent{ payload };
   conveyor.send(message_sent);
 
-  msg::Message message;
-  bool has_message = conveyor.processIncomingMessage(message);
+  Message mess = conveyor.processIncomingMessage();
 
-  EXPECT_TRUE(has_message);
-  EXPECT_EQ(message.type, msg::MessageType::INT32_MESSAGE);
+  ASSERT_NE(mess.message, nullptr);
   
-  msg::Int32Message& message_received = message.message.int32_message;
+  const auto& message_received = dynamic_cast<const msg::Int32Message&>(*mess.message);
   EXPECT_EQ(message_received.value, payload);
 }
 
@@ -59,12 +59,11 @@ TEST(MessageConveyor, sendReceiveMoveMessage) {
   msg::MoveMessage message_sent{ 1.f, 0.f, 0.5f };
   conveyor.send(message_sent);
 
-  msg::Message message;
-  bool has_message = conveyor.processIncomingMessage(message);
-  EXPECT_TRUE(has_message);
-  EXPECT_EQ(message.type, msg::MessageType::MOVE_MESSAGE);
+  Message mess = conveyor.processIncomingMessage();
 
-  msg::MoveMessage& message_received = message.message.move_message;
+  ASSERT_NE(mess.message, nullptr);
+
+  const auto& message_received = dynamic_cast<const msg::MoveMessage&>(*mess.message);
   EXPECT_EQ(message_received.x, 1.f);
   EXPECT_EQ(message_received.y, 0.f);
   EXPECT_EQ(message_received.rot, 0.5f);

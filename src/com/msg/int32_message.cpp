@@ -1,16 +1,26 @@
 #include "int32_message.h"
-#include "../serialization.h"
 
-namespace com {
+namespace com::msg {
 
-template <> inline
-uint8_t* serialize<msg::Int32Message>(const msg::Int32Message& msg, uint8_t* buffer) {
-  return serialize(msg.value, buffer);
+Int32Message::Int32Message(int32_t value) : value(value) {}
+
+uint32_t Int32Message::getSize() const {
+  return sizeof(value);
 }
 
-template<> inline
-const uint8_t* deserialize<msg::Int32Message>(const uint8_t* data, msg::Int32Message& message) {
-  return deserialize(data, message.value);
+uint16_t Int32Message::getMessageType() const {
+  return reg.message_type_id;
 }
+
+uint8_t* Int32Message::serialize(uint8_t* buffer) const {
+  return com::serialize(value, buffer);
+}
+
+stdx::UPtr<IMessage> Int32Message::deserialize(const uint8_t* data, const uint8_t** new_buffer_ptr) {
+  auto message = new msg::Int32Message();
+  *new_buffer_ptr = com::deserialize(data, message->value);
+  return message;
+}
+
 
 }

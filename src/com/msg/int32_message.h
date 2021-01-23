@@ -1,20 +1,25 @@
 #pragma once
 
 #include "message_types.h"
+#include "messages.h"
+#include "../serialization.h"
 
 namespace com::msg {
 
-struct Int32Message {
+struct Int32Message : public IMessage {
   int32_t value;
+
+  Int32Message() = default;
+  Int32Message(int32_t value);
+
+  uint32_t getSize() const override;
+  uint16_t getMessageType() const override;
+  uint8_t* serialize(uint8_t* buffer) const override;
+
+  static stdx::UPtr<IMessage> deserialize(const uint8_t* data, const uint8_t** new_buffer_ptr);
+
+private:
+  inline static DeserializationRegister<Int32Message> reg{"Int32Message"};
 };
-
-constexpr uint32_t getSize(const Int32Message& message) {
-  return sizeof(message.value);
-}
-
-template <>
-constexpr MessageType getMessageType<Int32Message>() {
-  return MessageType::INT32_MESSAGE;
-}
 
 }

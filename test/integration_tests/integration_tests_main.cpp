@@ -2,6 +2,9 @@
 
 #include <com/communication.h>
 #include <com/utils.h>
+#include <com/msg/empty_message.h>
+#include <com/msg/int32_message.h>
+#include <com/msg/move_message.h>
 
 #include <thread>
 #include <vector>
@@ -57,20 +60,23 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
     bool success = false;
     int r = std::rand();
     switch (r % 2) {
-    case 0:
+    case 0: {
       com::msg::MoveMessage move_message;
       move_message.x = n;
       success = conveyor.send(move_message);
       break;
-    case 1:
+    }
+    case 1: {
       com::msg::Int32Message int32_message;
       int32_message.value = n;
       success = conveyor.send(int32_message);
       break;
-    case 2:
+    }
+    case 2: {
       com::msg::EmptyMessage empty_message;
       success = conveyor.send(empty_message);
       break;
+    }
     }
 
     /*
@@ -91,22 +97,26 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
   conveyor.connect();
 
   int n = -1;
-  com::msg::Message message;
+  com::Message mess;
   while (n < (QUEUE_SIZE - 1)) {
-    bool has_message = conveyor.processIncomingMessage(message);
-    if (has_message) {
-      const com::msg::MessageType type = message.type;
+    mess = conveyor.processIncomingMessage();
+    if (mess.message) {
+      const com::msg::MessageType type = static_cast<com::msg::MessageType>(mess.message_type_id);
       switch (type) {
       case com::msg::MessageType::EMPTY_MESSAGE:
         break;
-      case com::msg::MessageType::INT32_MESSAGE:
-        n = message.message.int32_message.value;
+      case com::msg::MessageType::INT32_MESSAGE: {
+        auto message = dynamic_cast<const com::msg::Int32Message&>(*mess.message);
+        n = message.value;
         data.push_back(n);
         break;
-      case com::msg::MessageType::MOVE_MESSAGE:
-        n = message.message.move_message.x;
+      }
+      case com::msg::MessageType::MOVE_MESSAGE: {
+        auto message = dynamic_cast<const com::msg::MoveMessage&>(*mess.message);
+        n = message.x;
         data.push_back(n);
         break;
+      }
       }
     }
     /*
