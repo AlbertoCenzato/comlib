@@ -29,7 +29,7 @@ class UPtr
 {
 public:
   UPtr() : owned_ptr(nullptr) {}
-  UPtr(T*&& ptr) : owned_ptr(ptr) {}
+  UPtr(T*&& ptr) : UPtr() { swap(owned_ptr, ptr); }
   UPtr(nullptr_t ptr) : UPtr() {}
 
   UPtr(const UPtr<T>& ptr) = delete;

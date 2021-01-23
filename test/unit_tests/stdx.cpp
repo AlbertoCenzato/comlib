@@ -3,6 +3,15 @@
 
 using namespace com::stdx;
 
+TEST(swap, intswap)
+{
+  int a = 8;
+  int b = 19;
+  swap(a, b);
+  EXPECT_EQ(a, 19);
+  EXPECT_EQ(b, 8);
+}
+
 TEST(UPtr, defaultConstructor)
 {
   EXPECT_NO_THROW(
@@ -16,6 +25,42 @@ TEST(UPtr, ptrMoveConstructor)
     UPtr<int> ptr{ new int(5) };
   );
 }
+
+TEST(UPtr, nullptrConstructor)
+{
+  EXPECT_NO_THROW(
+    UPtr<int> ptr{ nullptr };
+  );
+}
+
+void func(UPtr<int> ptr) {}
+
+TEST(UPtr, implicitConversionFromNullptr)
+{
+  EXPECT_NO_THROW(
+    func(nullptr);
+  );
+}
+
+TEST(UPtr, implicitConversionToBool)
+{
+  EXPECT_TRUE(UPtr<int>{ new int(6) });
+  EXPECT_FALSE(UPtr<int>{ nullptr });
+}
+
+TEST(UPtr, operatorEQ)
+{
+  UPtr<int> ptr1{ new int(6) };
+  UPtr<int> ptr{ nullptr };
+  UPtr<int> ptr3{ nullptr };
+
+  EXPECT_EQ(ptr, ptr3);
+  EXPECT_EQ(ptr, nullptr);
+  EXPECT_EQ(nullptr, ptr3);
+  EXPECT_NE(ptr1, ptr3);
+  EXPECT_NE(ptr1, nullptr);
+}
+
 
 /*
 *
