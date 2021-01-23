@@ -1,7 +1,6 @@
 #pragma once
 
 #include "messages.h"
-#include "../serialization.h"
 
 namespace com::msg {
 
