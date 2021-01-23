@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cinttypes>
 #include "message_registry.h"
+#include <cinttypes>
 
 namespace com::msg {
 

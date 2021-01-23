@@ -1,4 +1,5 @@
 #include "int32_message.h"
+#include "../serialization.h"
 
 namespace com::msg {
 
