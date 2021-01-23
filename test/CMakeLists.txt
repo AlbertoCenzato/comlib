@@ -23,6 +23,7 @@ set (UNIT_TEST_SRC
 	unit_tests/utils.cpp
 	unit_tests/mock_message_socket.cpp
 	unit_tests/stream_message_reader.cpp
+	unit_tests/stdx.cpp
 )
 
 add_executable (comlib_unit_tests ${UNIT_TEST_SRC})
