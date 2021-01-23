@@ -9,7 +9,7 @@ uint32_t MoveMessage::getSize() const {
   return sizeof(x) + sizeof(y) + sizeof(rot);
 }
 
-uint16_t MoveMessage::getMessageType() const {
+MessageType MoveMessage::getMessageType() const {
   return reg.message_type_id;
 }
 

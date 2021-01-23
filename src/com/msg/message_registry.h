@@ -8,6 +8,8 @@ using namespace com;
 
 namespace com::msg {
 
+using MessageType = uint16_t;
+
 struct IMessage;
 
 using MessageDeserializationCallback = stdx::UPtr<IMessage> (*)(const uint8_t* buffer, const uint8_t** new_buffer_ptr);
@@ -20,18 +22,18 @@ public:
 
   static MessageRegistry& getInstance();
 
-  uint16_t registerMessageDeserializationCallback(
+  MessageType registerMessageDeserializationCallback(
     const std::string& message_type_id, 
     MessageDeserializationCallback callback);
 
   stdx::UPtr<IMessage> deserializeMessage(
-    uint16_t message_type_id, 
+    MessageType message_type_id, 
     const uint8_t* buffer, 
     const uint8_t** new_buffer_ptr) const;
 
 private:
   struct KeyValue {
-    uint16_t message_type_id;
+    MessageType message_type_id;
     MessageDeserializationCallback func;
   };
 

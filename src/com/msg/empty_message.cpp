@@ -7,7 +7,7 @@ uint32_t EmptyMessage::getSize() const {
 	return uint32_t(0);
 }
 
-uint16_t EmptyMessage::getMessageType() const {
+MessageType EmptyMessage::getMessageType() const {
 	return reg.message_type_id;
 }
 

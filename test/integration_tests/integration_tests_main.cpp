@@ -98,6 +98,8 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
 
   int n = -1;
   com::Message mess;
+  
+  /*
   while (n < (QUEUE_SIZE - 1)) {
     mess = conveyor.processIncomingMessage();
     if (mess.message) {
@@ -119,16 +121,8 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
       }
       }
     }
-    /*
-    else {
-      std::cout << "Waiting for message completion" << std::endl;
-    }
-
-    if (n % 1000 == 0) {
-      std::cout << "Received: " << n << std::endl;
-    }
-    */
   }
+  */
 
   conveyor.disconnect();
 }

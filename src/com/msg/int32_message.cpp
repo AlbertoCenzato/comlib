@@ -8,7 +8,7 @@ uint32_t Int32Message::getSize() const {
   return sizeof(value);
 }
 
-uint16_t Int32Message::getMessageType() const {
+MessageType Int32Message::getMessageType() const {
   return reg.message_type_id;
 }
 

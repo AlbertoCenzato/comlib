@@ -26,10 +26,10 @@ TEST(MessageConveyor, sendInt32Message) {
   EXPECT_EQ(bytes_received, expected_message_size_in_bytes);
 
   uint32_t message_length;
-  uint16_t message_type;
+  msg::MessageType message_type;
   int32_t received_payload;
   auto buff_ptr = deserialize<uint32_t>(receive_buffer, message_length);
-  buff_ptr = deserialize<uint16_t>(buff_ptr, message_type);
+  buff_ptr = deserialize<msg::MessageType>(buff_ptr, message_type);
   deserialize<int32_t>(buff_ptr, received_payload);
   EXPECT_EQ(message_sent.getSize() + sizeof(msg::MessageType), message_length);
   EXPECT_EQ(message_sent.getMessageType(), message_type);

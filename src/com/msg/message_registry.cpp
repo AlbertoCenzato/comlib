@@ -14,14 +14,14 @@ MessageRegistry& MessageRegistry::getInstance() {
   return registry;
 }
 
-uint16_t MessageRegistry::registerMessageDeserializationCallback(
+MessageType MessageRegistry::registerMessageDeserializationCallback(
   const std::string& message_type_name,
   MessageDeserializationCallback callback)
 {
   assert(next_available_empty_register < MAP_SIZE);
 
   // TODO: fix this horrible static_cast
-  uint16_t message_type_id = static_cast<uint16_t>(std::hash<std::string>{}(message_type_name));  // TODO: provide an arduino-compatible hash function that hashes from string to uint16_t
+  MessageType message_type_id = static_cast<MessageType>(std::hash<std::string>{}(message_type_name));  // TODO: provide an arduino-compatible hash function that hashes from string to uint16_t
 
   deserialization_map[next_available_empty_register].message_type_id = message_type_id;
   deserialization_map[next_available_empty_register].func = callback;
@@ -31,7 +31,7 @@ uint16_t MessageRegistry::registerMessageDeserializationCallback(
 }
 
 stdx::UPtr<IMessage> MessageRegistry::deserializeMessage(
-  uint16_t message_type_id, 
+  MessageType message_type_id, 
   const uint8_t* buffer, 
   const uint8_t** new_buffer_ptr) const 
 {

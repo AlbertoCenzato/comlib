@@ -5,7 +5,6 @@
 #include "serialization.h"
 #include "msg/messages.h"
 #include "msg/message_registry.h"
-#include "msg/message_types.h"
 
 namespace com {
 
@@ -13,11 +12,11 @@ struct Message;
 void swap(Message& a, Message& b);
 
 struct Message {
-  uint16_t message_type_id;
+  msg::MessageType message_type_id;
   stdx::UPtr<msg::IMessage> message;
 
   Message() : message_type_id(0), message() {}
-  Message(uint16_t message_type_id, stdx::UPtr<msg::IMessage>&& message)
+  Message(msg::MessageType message_type_id, stdx::UPtr<msg::IMessage>&& message)
     : message_type_id(message_type_id), message(stdx::move(message)) {}
   Message(const Message& mess) = delete;
   Message(Message&& mess) : Message() { swap(*this, mess); }
@@ -43,7 +42,7 @@ public:
   void disconnect() { return socket->disconnect(); }
    
   bool send(const msg::IMessage& message) {
-    uint32_t message_length = sizeof(uint16_t) + message.getSize();
+    uint32_t message_length = sizeof(msg::MessageType) + message.getSize();
     uint8_t* data_buffer = serialize(message_length, send_buffer);
     data_buffer = serialize(message.getMessageType(), data_buffer);
     data_buffer = message.serialize(data_buffer);
@@ -82,7 +81,7 @@ private:
   StreamMessageReader stream_reader;
 
   Message bufferToMessage(const uint8_t* buffer) {
-    uint16_t type;
+    msg::MessageType type;
     buffer = deserialize(buffer, type);
     if (!buffer) {
       // TODO(cenz): deal with synchronization issues

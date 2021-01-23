@@ -1,6 +1,5 @@
 #pragma once
 
-#include "message_types.h"
 #include "messages.h"
 #include "../serialization.h"
 
@@ -13,7 +12,7 @@ struct Int32Message : public IMessage {
   Int32Message(int32_t value);
 
   uint32_t getSize() const override;
-  uint16_t getMessageType() const override;
+  MessageType getMessageType() const override;
   uint8_t* serialize(uint8_t* buffer) const override;
 
   static stdx::UPtr<IMessage> deserialize(const uint8_t* data, const uint8_t** new_buffer_ptr);
