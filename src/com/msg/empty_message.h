@@ -11,6 +11,7 @@ struct EmptyMessage : public IMessage {
 	uint8_t* serialize(uint8_t* buffer) const override;
 
 	static stdx::UPtr<IMessage> deserialize(const uint8_t* data, const uint8_t** new_data_ptr);
+	static MessageType type();
 
 private:
 	inline static DeserializationRegister<EmptyMessage> reg{"EmptyMessage"};

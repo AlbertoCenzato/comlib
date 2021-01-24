@@ -15,6 +15,7 @@ struct Int32Message : public IMessage {
   uint8_t* serialize(uint8_t* buffer) const override;
 
   static stdx::UPtr<IMessage> deserialize(const uint8_t* data, const uint8_t** new_buffer_ptr);
+  static MessageType type();
 
 private:
   inline static DeserializationRegister<Int32Message> reg{"Int32Message"};

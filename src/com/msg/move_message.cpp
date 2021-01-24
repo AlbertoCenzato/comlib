@@ -10,7 +10,7 @@ uint32_t MoveMessage::getSize() const {
 }
 
 MessageType MoveMessage::getMessageType() const {
-  return reg.message_type_id;
+  return type();
 }
 
 uint8_t* MoveMessage::serialize(uint8_t* buffer) const {
@@ -26,6 +26,10 @@ stdx::UPtr<IMessage> MoveMessage::deserialize(const uint8_t* data, const uint8_t
   data = com::deserialize(data, message->y);
   *new_data_ptr = com::deserialize(data, message->rot);
   return message;  // TODO: variance of return types?
+}
+
+MessageType MoveMessage::type() {
+  return reg.message_type_id;
 }
 
 }

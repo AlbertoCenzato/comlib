@@ -8,7 +8,7 @@ uint32_t EmptyMessage::getSize() const {
 }
 
 MessageType EmptyMessage::getMessageType() const {
-	return reg.message_type_id;
+	return type();
 }
 
 uint8_t* EmptyMessage::serialize(uint8_t* buffer) const {
@@ -20,5 +20,8 @@ stdx::UPtr<IMessage> EmptyMessage::deserialize(const uint8_t* data, const uint8_
 	return new EmptyMessage{};
 }
 
+MessageType EmptyMessage::type() {
+	return reg.message_type_id;
+}
 
 }

@@ -10,7 +10,7 @@ uint32_t Int32Message::getSize() const {
 }
 
 MessageType Int32Message::getMessageType() const {
-  return reg.message_type_id;
+  return type();
 }
 
 uint8_t* Int32Message::serialize(uint8_t* buffer) const {
@@ -21,6 +21,10 @@ stdx::UPtr<IMessage> Int32Message::deserialize(const uint8_t* data, const uint8_
   auto message = new msg::Int32Message();
   *new_buffer_ptr = com::deserialize(data, message->value);
   return message;
+}
+
+MessageType Int32Message::type() {
+  return reg.message_type_id;
 }
 
 
