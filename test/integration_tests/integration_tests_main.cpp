@@ -92,6 +92,11 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
   conveyor.disconnect();
 }
 
+
+void callback(const msg::IMessage& message) {
+
+}
+
 void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data) {
   com::MessageConveyor conveyor{ &socket };
   conveyor.connect();
@@ -99,6 +104,8 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data
   int n = -1;
   com::Message mess;
   
+  conveyor.registerCallback<msg::Int32Message>(callback);
+
   /*
   while (n < (QUEUE_SIZE - 1)) {
     mess = conveyor.processIncomingMessage();

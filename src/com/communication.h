@@ -3,6 +3,7 @@
 #include "communication_interface.h"
 #include "stream_message_reader.h"
 #include "serialization.h"
+#include "message_callback_registry.h"
 #include "msg/messages.h"
 #include "msg/message_registry.h"
 
@@ -50,32 +51,30 @@ public:
     return socket->send(send_buffer, sizeof(message_length) + message_length);
   }
 
-  Message processIncomingMessage() {
+  void processIncomingMessage() {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
     bool is_complete_message = 
       stream_reader.processIncomingBytes(*socket, receive_buffer, BUFFER_SIZE);
     if (!is_complete_message)
-      return { 0,nullptr };
+      return;
 
     const uint8_t* message_begin = receive_buffer + sizeof(uint32_t);
-    return bufferToMessage(message_begin);
-    // TODO(cenz): dispatch message with the correct type
-    //auto& callbacks = callback_registry[message.type];
-    //for (auto& callback : callbacks) {
-    //  callback(message);
-    //}
+    Message message = bufferToMessage(message_begin);
+
+    assert(message.message != nullptr);
+    callback_registry.call(message.message_type_id, *message.message);
   }
 
-  /*
-  void registerCallback(MessageType type, Callback callback) {
-    callback_registry[type].push_back(callback);
+  template <class Msg>
+  void registerCallback(MessageCallbackRegistry::Callback callback) {
+    callback_registry.registerCallback(Msg::type(), callback);
   }
-  */
 
 private:
   uint8_t send_buffer[BUFFER_SIZE];
   uint8_t receive_buffer[BUFFER_SIZE];
+  MessageCallbackRegistry callback_registry;
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
