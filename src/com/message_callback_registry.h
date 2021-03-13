@@ -12,6 +12,9 @@ public:
 
   void registerCallback(msg::MessageType type, Callback callback);
   void call(msg::MessageType type, const msg::IMessage& msg) const;
+  int getRegisterIndex(msg::MessageType type) const;
+  bool isRegistered(msg::MessageType type) const;
+  size_t registeredTypes() const;
 
 private:
   struct CallbackRegistry {
@@ -21,9 +24,11 @@ private:
   };
 
   CallbackRegistry registry[256];
+  size_t registered_types = 0;
 
-  CallbackRegistry& getRegistry(msg::MessageType type);
-  const CallbackRegistry& getRegistry(msg::MessageType type) const;
+  CallbackRegistry* getRegistry(msg::MessageType type);
+  const CallbackRegistry* getRegistry(msg::MessageType type) const;
+  CallbackRegistry& reserveNewRegistry(msg::MessageType type);
 };
 
 
