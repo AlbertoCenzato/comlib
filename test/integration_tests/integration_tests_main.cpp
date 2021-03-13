@@ -10,21 +10,24 @@
 #include <vector>
 #include <numeric>
 #include <iostream>
+#include <functional>
 
 void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& data);
-void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data);
+void receive(com::test::ThreadsafeLoopbackSocket& socket);
 
 constexpr int QUEUE_SIZE = 1000000;
 
+std::vector<int> receive_queue;
+
 int main() {
-  std::vector<int> send_queue, receive_queue;
+  std::vector<int> send_queue;
   send_queue.resize(QUEUE_SIZE);
   std::iota(send_queue.begin(), send_queue.end(), 0);
 
   {
     com::test::ThreadsafeLoopbackSocket socket;
     std::thread send_thread{ send, std::ref(socket), std::cref(send_queue) };
-    std::thread receive_thread{ receive, std::ref(socket), std::ref(receive_queue) };
+    std::thread receive_thread{ receive, std::ref(socket) };
 
     send_thread.join();
     receive_thread.join();
@@ -78,58 +81,44 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
       break;
     }
     }
-
-    /*
-    if (!success) {
-      std::cout << "Send error" << std::endl;
-    }
-    else if (n % 1000 == 0) {
-      std::cout << "Sent: " << n << std::endl;
-    }
-    */
   }
 
   conveyor.disconnect();
 }
 
 
-void callback(const msg::IMessage& message) {
+int messages_received = 0;
 
+void callbackEmpty(const msg::IMessage& message) {
+  std::cout << "Empty callback called!" << std::endl;
+  messages_received++;
 }
 
-void receive(com::test::ThreadsafeLoopbackSocket& socket, std::vector<int>& data) {
+void callbackInt32(const msg::IMessage& message) {
+  const auto& int32_message = dynamic_cast<const com::msg::Int32Message&>(message);
+  receive_queue.push_back(int32_message.value);
+  messages_received++;
+}
+
+void callbackMove(const msg::IMessage& message) {
+  const auto& move_message = dynamic_cast<const com::msg::MoveMessage&>(message);
+  receive_queue.push_back(move_message.x);
+  messages_received++;
+}
+
+
+void receive(com::test::ThreadsafeLoopbackSocket& socket) {
   com::MessageConveyor conveyor{ &socket };
   conveyor.connect();
+    
+  conveyor.registerCallback<msg::EmptyMessage>(callbackEmpty);
+  conveyor.registerCallback<msg::Int32Message>(callbackInt32);
+  conveyor.registerCallback<msg::MoveMessage>(callbackMove);
 
-  int n = -1;
-  com::Message mess;
-  
-  conveyor.registerCallback<msg::Int32Message>(callback);
-
-  /*
-  while (n < (QUEUE_SIZE - 1)) {
-    mess = conveyor.processIncomingMessage();
-    if (mess.message) {
-      const com::msg::MessageType type = static_cast<com::msg::MessageType>(mess.message_type_id);
-      switch (type) {
-      case com::msg::MessageType::EMPTY_MESSAGE:
-        break;
-      case com::msg::MessageType::INT32_MESSAGE: {
-        auto message = dynamic_cast<const com::msg::Int32Message&>(*mess.message);
-        n = message.value;
-        data.push_back(n);
-        break;
-      }
-      case com::msg::MessageType::MOVE_MESSAGE: {
-        auto message = dynamic_cast<const com::msg::MoveMessage&>(*mess.message);
-        n = message.x;
-        data.push_back(n);
-        break;
-      }
-      }
-    }
+  while (messages_received < (QUEUE_SIZE - 1)) {
+    conveyor.processIncomingMessage();
+    //std::this_thread::sleep_for(std::chrono::milliseconds{10});
   }
-  */
 
   conveyor.disconnect();
 }
