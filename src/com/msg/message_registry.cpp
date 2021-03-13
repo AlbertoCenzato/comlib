@@ -1,7 +1,6 @@
 #include "message_registry.h"
 #include "messages.h"
 #include <cassert>
-#include <string.h>
 
 namespace com::msg {
 
@@ -15,7 +14,7 @@ MessageRegistry& MessageRegistry::getInstance() {
 }
 
 MessageType MessageRegistry::registerMessageDeserializationCallback(
-  const std::string& message_type_name,
+  const String& message_type_name,
   MessageDeserializationCallback callback)
 {
   assert(next_available_empty_register < MAP_SIZE);

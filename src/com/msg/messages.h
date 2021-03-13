@@ -15,10 +15,10 @@ struct IMessage {
 
 protected:
   template <class T>
-  struct DeserializationRegister {
+  struct DeserializationRegister {  // TODO: constexpr?
     MessageType message_type_id;
 
-    DeserializationRegister(const std::string& class_name) {
+    DeserializationRegister(const String& class_name) {
       auto& reg = MessageRegistry::getInstance();
       message_type_id = reg.registerMessageDeserializationCallback(class_name, T::deserialize);
     }

@@ -38,4 +38,8 @@ inline void toBlinkCoding(uint32_t value) {
 #else
 #include <cstdint>
 #include <cstddef>
+#include <string>
+
+using String = std::string;
+
 #endif

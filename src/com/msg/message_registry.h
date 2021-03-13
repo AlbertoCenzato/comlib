@@ -2,7 +2,6 @@
 
 #include "../stdx.h"
 #include <cinttypes>
-#include <string>
 
 using namespace com;
 
@@ -23,7 +22,7 @@ public:
   static MessageRegistry& getInstance();
 
   MessageType registerMessageDeserializationCallback(
-    const std::string& message_type_id, 
+    const String& message_type_id, 
     MessageDeserializationCallback callback);
 
   stdx::UPtr<IMessage> deserializeMessage(
