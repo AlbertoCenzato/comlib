@@ -19,9 +19,12 @@ MessageType MessageRegistry::registerMessageDeserializationCallback(
 {
   assert(next_available_empty_register < MAP_SIZE);
 
-  // TODO: fix this horrible static_cast
-  MessageType message_type_id = static_cast<MessageType>(std::hash<std::string>{}(message_type_name));  // TODO: provide an arduino-compatible hash function that hashes from string to uint16_t
+  const int index = getKeyValueIndex(message_type_name);
+  if (index >= 0)
+    throw HashCollisionException{message_type_name + "already registered"};
 
+  const auto message_type_id = utils::hash<MessageType>(message_type_name);
+  
   deserialization_map[next_available_empty_register].message_type_id = message_type_id;
   deserialization_map[next_available_empty_register].func = callback;
   next_available_empty_register++;
@@ -44,6 +47,14 @@ stdx::UPtr<IMessage> MessageRegistry::deserializeMessage(
     return callback(buffer, new_buffer_ptr);
 
   return nullptr;
+}
+
+int MessageRegistry::getKeyValueIndex(const String& message_type_name) const {
+  const auto message_type_id = utils::hash<MessageType>(message_type_name);
+  for (int i = 0; i < next_available_empty_register; ++i)
+    if (deserialization_map[i].message_type_id == message_type_id)
+      return i;
+  return -1;
 }
 
 }

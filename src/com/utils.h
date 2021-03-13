@@ -62,9 +62,18 @@ void shiftBytesLeft(uint8_t* array, size_t length, size_t shift);
 void shiftBytesRight(uint8_t* array, size_t length, size_t shift);
 
 template <class T>
-bool isInRange(const T& value, const T& min, const T& max) {
-  assert(min <= max);
-  return min <= value && value <= max;
+bool isInRange(const T& value, const T& min_inclusive, const T& max_inclusive) {
+  assert(min_inclusive <= max_inclusive);
+  return min_inclusive <= value && value <= max_inclusive;
+}
+
+template <class T>
+T hash(const String& str) {
+  T hash = 5381;
+  for (size_t i = 0; i < str.length(); ++i)
+    hash = ((hash << 5) + hash) ^ str[i];  // (hash * 33) XOR c;    see http://www.cse.yorku.ca/~oz/hash.html
+
+  return hash;
 }
 
 }  // namespace utils

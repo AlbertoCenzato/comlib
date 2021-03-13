@@ -13,7 +13,11 @@ struct IMessage;
 
 using MessageDeserializationCallback = stdx::UPtr<IMessage> (*)(const uint8_t* buffer, const uint8_t** new_buffer_ptr);
 
-class MessageRegistry 
+struct HashCollisionException {
+  String message;
+};
+
+class MessageRegistry   // TODO: constexpr?
 {
 public:
 
@@ -40,6 +44,8 @@ private:
   size_t next_available_empty_register;
 
   MessageRegistry();
+
+  int getKeyValueIndex(const String& message_type_id) const;
 };
 
 }
