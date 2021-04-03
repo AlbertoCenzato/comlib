@@ -33,6 +33,16 @@
       (out (string-append-immutable type " " id ";"))
       (unless (empty? other-members) (declare-members out other-members))))
 
+(define (generate-members-as-params members)
+   (define (member-as-param member)
+      (string-join (list (type member) (id member))))
+
+   (define (generate-members-list members)
+      (if (empty? members)
+         null
+         (append (list (member-as-param (first members))) (generate-members-list (rest members)))))
+   (string-join (generate-members-list members) ", "))
+      
 (define (generate-class-declaration-body out class_name members)
    (define outln (out-ln out))
 
@@ -40,6 +50,9 @@
       (outln (string-append-immutable "inline static DeserializationRegister<" class_name "> reg{\"" class_name "\"};")))
 
    (declare-members outln members)
+   (outln "")
+   (outln (string-append-immutable class_name "() = default;"))
+   (outln (string-append-immutable class_name "(" (generate-members-as-params members) ");"))
    (outln "")
    (outln "uint32_t getSize() const override;")
    (outln "MessageType getMessageType() const override;")
@@ -109,6 +122,14 @@
       (let ([token (list "return sizeof(" (id (first members)) ")")])
          (append token (generate-sizeof (rest members))))))
 
+(define (generate-members-initialization members)
+   (define (initialize member)
+      (string-append-immutable (id member) "(" (id member) ")"))
+
+   (if (empty? members)
+      null
+      (append (list (initialize (first members))) (generate-members-initialization (rest members)))))
+
 (define (generate-class-definition out class_name members)
    (let ([outln (out-ln out)]
          [get-size-signature (string-append-immutable "uint32_t " class_name "::getSize() const")]
@@ -117,6 +138,7 @@
          [deserialize-signature (string-append-immutable "stdx::UPtr<IMessage> " class_name "::deserialize(const uint8_t* data, const uint8_t** new_buffer_ptr)")]
          [type-signature (string-append-immutable "MessageType " class_name "::type()")])
 
+      (outln (string-append-immutable class_name "::" class_name "(" (generate-members-as-params members) ")\n\t : " (string-join (generate-members-initialization members) ", ") " {}\n"))
       (generate-function-definition out get-size-signature (λ (out) 
          (out (string-join (generate-get-size-code members)))))
       (generate-function-definition out get-message-type-signature (λ (out) (out "return type();\n")))
