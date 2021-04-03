@@ -1,8 +1,8 @@
 #include "mocks/mock_message_socket.h"
 
 #include <com/communication.h>
-#include <com/msg/int32_message.h>
-#include <com/msg/move_message.h>
+#include <com/msg/Int32.h>
+#include <com/msg/Move.h>
 
 #include <gtest/gtest.h>
 
@@ -13,7 +13,7 @@ TEST(MessageConveyor, sendInt32Message) {
   MessageConveyor<256> conveyor{ &socket };
 
   const int32_t payload = 0x01234567;
-  msg::Int32Message message_sent{ payload };
+  msg::Int32 message_sent = { payload };
   bool result = conveyor.send(message_sent);
   EXPECT_TRUE(result);
 
@@ -39,7 +39,7 @@ TEST(MessageConveyor, sendInt32Message) {
 int32_t received_value = 0;
 
 void callbackInt32(const msg::IMessage& message) {
-  const auto& int32_message = dynamic_cast<const msg::Int32Message&>(message);
+  const auto& int32_message = dynamic_cast<const msg::Int32&>(message);
   received_value = int32_message.value;
 }
 
@@ -47,10 +47,10 @@ TEST(MessageConveyor, sendReceiveInt32Message) {
   test::LoopbackMockMessageSocket socket;
   MessageConveyor<256> conveyor{ &socket };
 
-  conveyor.registerCallback<msg::Int32Message>(callbackInt32);
+  conveyor.registerCallback<msg::Int32>(callbackInt32);
 
   const int32_t payload = 0x01234567;
-  msg::Int32Message message_sent{ payload };
+  msg::Int32 message_sent{ payload };
   conveyor.send(message_sent);
 
   conveyor.processIncomingMessage();
@@ -61,7 +61,7 @@ TEST(MessageConveyor, sendReceiveInt32Message) {
 float x, y, rot;
 
 void callbackMove(const msg::IMessage& message) {
-  const auto& move_message = dynamic_cast<const msg::MoveMessage&>(message);
+  const auto& move_message = dynamic_cast<const msg::Move&>(message);
   x = move_message.x;
   y = move_message.y;
   rot = move_message.rot;
@@ -71,9 +71,9 @@ TEST(MessageConveyor, sendReceiveMoveMessage) {
   test::LoopbackMockMessageSocket socket;
   MessageConveyor<265> conveyor{ &socket };
   
-  conveyor.registerCallback<msg::MoveMessage>(callbackMove);
+  conveyor.registerCallback<msg::Move>(callbackMove);
 
-  msg::MoveMessage message_sent{ 1.f, 0.f, 0.5f };
+  msg::Move message_sent{ 1.f, 0.f, 0.5f };
   conveyor.send(message_sent);
 
   conveyor.processIncomingMessage();
