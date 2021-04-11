@@ -4,7 +4,7 @@
 namespace com::msg {
 
 @|className|::@className(@constructorParams)
-  : @constructorParamsInit {}
+  @constructorParamsInit {}
 
 uint32_t @|className|::getSize() const {
   return @sizeof;

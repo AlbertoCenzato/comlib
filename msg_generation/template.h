@@ -7,7 +7,7 @@ namespace com::msg {
 struct @className : public IMessage {
   @memberVariables	
   	
-  @className() = default;	
+  @defaultConstructor	
   @className(@constructorParams);	
   	
   uint32_t getSize() const override;	

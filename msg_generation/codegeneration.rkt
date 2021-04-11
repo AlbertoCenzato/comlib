@@ -7,6 +7,7 @@
 
 (define (generate-header className members)
   (let ([memberVariables (declare-members members)]
+        [defaultConstructor (generate-default-constructor className members)]
         [constructorParams (generate-members-as-params members)]
         [constructorParamsInit (generate-constructor-params-init members)]
         [sizeof (generate-sizeof members)]
@@ -48,7 +49,9 @@
 (define (generate-constructor-params-init members)
    (define (generate-member-initialization member)
       (string-append-immutable (id member) "(" (id member) ")"))
-   (string-join (map generate-member-initialization members) ", "))
+   (if (empty? members)
+      ""
+      (string-append-immutable ": " (string-join (map generate-member-initialization members) ", "))))
 
 (define (generate-serialization members)
    (define (generate-field-serialization member)
@@ -63,5 +66,12 @@
 (define (generate-sizeof members)
    (define (sizeof member)
       (string-append-immutable "sizeof(" (id member) ")"))
-   (string-join (map sizeof members) " + ")) 
+   (if (empty? members)
+      "0"
+      (string-join (map sizeof members) " + "))) 
+
+(define (generate-default-constructor className members)
+   (if (empty? members)
+      ""
+      (string-append-immutable className "() = default;")))
 
