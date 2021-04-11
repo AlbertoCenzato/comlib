@@ -1,6 +1,6 @@
 #pragma once
 
-#include "messages.h"
+#include "../i_message.h"
 
 namespace com::msg {
 

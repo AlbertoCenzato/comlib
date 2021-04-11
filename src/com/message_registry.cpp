@@ -1,5 +1,5 @@
 #include "message_registry.h"
-#include "messages.h"
+#include "i_message.h"
 #include <cassert>
 
 namespace com::msg {

@@ -4,8 +4,8 @@
 #include "stream_message_reader.h"
 #include "serialization.h"
 #include "message_callback_registry.h"
-#include "msg/messages.h"
-#include "msg/message_registry.h"
+#include "i_message.h"
+#include "message_registry.h"
 
 namespace com {
 
