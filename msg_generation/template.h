@@ -18,7 +18,7 @@ struct @className : public IMessage {
   static MessageType type();	
 		
 private:	
-  inline static DeserializationRegister<Move> reg{"@className"};	
+  inline static DeserializationRegister<@|className|> reg{"@className"};	
 };
 
 }
