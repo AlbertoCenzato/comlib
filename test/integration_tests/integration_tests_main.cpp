@@ -2,7 +2,7 @@
 
 #include <com/communication.h>
 #include <com/utils.h>
-#include <com/msg/empty_message.h>
+#include <com/msg/Empty.h>
 #include <com/msg/Int32.h>
 #include <com/msg/Move.h>
 
@@ -76,7 +76,7 @@ void send(com::test::ThreadsafeLoopbackSocket& socket, const std::vector<int>& d
       break;
     }
     case 2: {
-      com::msg::EmptyMessage empty_message;
+      com::msg::Empty empty_message;
       success = conveyor.send(empty_message);
       break;
     }
@@ -111,7 +111,7 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket) {
   com::MessageConveyor conveyor{ &socket };
   conveyor.connect();
     
-  conveyor.registerCallback<msg::EmptyMessage>(callbackEmpty);
+  conveyor.registerCallback<msg::Empty>(callbackEmpty);
   conveyor.registerCallback<msg::Int32>(callbackInt32);
   conveyor.registerCallback<msg::Move>(callbackMove);
 
