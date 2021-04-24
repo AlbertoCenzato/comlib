@@ -128,3 +128,68 @@ TEST(UPtr, swap)
   EXPECT_EQ(ptr2->a, 1);
   EXPECT_EQ(ptr2->b, 2);
 }
+
+TEST(vector, defaultConstructor)
+{
+  vector<int> array;
+  EXPECT_EQ(array.size(), 0);
+  EXPECT_EQ(array.begin(), nullptr);
+  EXPECT_EQ(array.end(), static_cast<int*>(nullptr) + array.size());
+}
+
+TEST(vector, constructor0)
+{
+  vector<int> array{ 0 };
+  EXPECT_EQ(array.size(), 0);
+  EXPECT_EQ(array.begin(), nullptr);
+  EXPECT_EQ(array.end(), static_cast<int*>(nullptr) + array.size());
+}
+
+TEST(vector, constructor)
+{
+  vector<int> array{ 256 };
+  EXPECT_EQ(array.size(), 256);
+  EXPECT_EQ(array.end() - array.begin(), 256);
+}
+
+TEST(vector, copyConstructor)
+{
+  vector<int> array_a{ 256 };
+  for (auto& v : array_a)
+    v = rand();
+
+  vector<int> array_b{ array_a };
+  EXPECT_NE(array_a.begin(), array_b.begin());
+  EXPECT_EQ(array_a.size(), array_b.size());
+  for (size_t i = 0; i < array_a.size(); i++)
+    EXPECT_EQ(array_a[i], array_b[i]);
+}
+
+TEST(vector, moveConstructor)
+{
+  vector<int> array_a{ 256 };
+  for (auto& v : array_a)
+    v = rand();
+
+  vector<int> array_b{ array_a };
+  vector<int> array_c{ std::move(array_b) };
+
+  EXPECT_EQ(array_a.size(), array_c.size());
+  for (size_t i = 0; i < array_a.size(); i++)
+    EXPECT_EQ(array_a[i], array_c[i]);
+  EXPECT_EQ(array_b.size(), 0);
+  EXPECT_EQ(array_b.begin(), nullptr);
+}
+
+TEST(vector, copyAssignment)
+{
+  vector<int> array_a{ 256 };
+  for (auto& v : array_a)
+    v = rand();
+  
+  auto array_b = array_a;
+  EXPECT_NE(array_a.begin(), array_b.begin());
+  EXPECT_EQ(array_a.size(), array_b.size());
+  for (size_t i = 0; i < array_a.size(); i++)
+    EXPECT_EQ(array_a[i], array_b[i]);
+}
