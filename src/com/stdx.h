@@ -136,4 +136,26 @@ void swap(vector<T>& a, vector<T>& b) noexcept {
   swap(a.length, b.length);
   swap(a.data, b.data);
 }
+
+
+template <typename T, size_t N>
+class array {
+public:
+  using value_type = T;
+
+  T& operator[](size_t index) { return data[index]; }
+  const T& operator[](size_t index) const { return data[index]; }
+
+  T* begin() noexcept { return data; }
+  const T* begin() const noexcept { return data; }
+
+  T* end() noexcept { return data + size(); }
+  const T* end() const noexcept { return data + size(); }
+
+  static constexpr size_t size() noexcept { return N; }
+
+private:
+  T data[N];
+};
+
 }
