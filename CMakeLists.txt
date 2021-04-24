@@ -6,7 +6,7 @@ file (GLOB MSGS_GEN ${CMAKE_CURRENT_LIST_DIR}/msg/*.msg)
 
 foreach(file ${MSGS_GEN})
 	message(${file})
-	execute_process(COMMAND racket ${CMAKE_CURRENT_LIST_DIR}/msg_generation/main.rkt ${file} ${CMAKE_CURRENT_LIST_DIR}/src/com/msg
+	execute_process(COMMAND racket ${CMAKE_CURRENT_LIST_DIR}/msg_generation/message_generator.rkt ${file} ${CMAKE_CURRENT_LIST_DIR}/src/com/msg
 					RESULT_VARIABLE result)
 	message(${result}) 
 endforeach()
