@@ -2,12 +2,25 @@
 
 (require scribble/text)
 (require racket/match)
+(require "utils.rkt")
 
 (provide generate-header)
 (provide generate-source)
 (provide parse-field-declaration)
 
+; --------------- member struct -----------------
+
 (struct member (type id size))
+
+(define (array? member)
+   (>= (member-size member) 0))
+
+(define (member->string member)
+   (if (array? member)
+      (string-append-immutable "stdx::array<" (member-type member) "," (number->string (member-size member)) "> " (member-id member))
+      (string-append-immutable (member-type member) " " (member-id member))))
+
+; --------------- code generation functions -----------------
 
 (define (generate-header className members)
   (let ([messageDependenciesHeaders (include-dependencies members)]
@@ -28,20 +41,6 @@
         [deserialization (generate-deserialization members)])
     (include/text "template.cpp")))
 
-(define (array? member)
-   (>= (member-size member) 0))
-
-(define (member->string member)
-   (if (array? member)
-      (string-append-immutable "stdx::array<" (member-type member) "," (number->string (member-size member)) "> " (member-id member))
-      (string-append-immutable (member-type member) " " (member-id member))))
-
-(define (add-semicolon str)
-   (string-append-immutable str ";"))
-
-(define (add-newline str)
-   (string-append-immutable str "\n"))
-
 (define (parse-field-declaration str)
    (match str 
       [(regexp #rx"^([a-zA-Z_][a-zA-Z0-9_]*)\\[([0-9]+)\\] ([a-zA-Z_][a-zA-Z0-9_]*)$" (list _ type size id))
@@ -53,9 +52,6 @@
 
 (define (generate-type-id-list members)
    (map member->string members))
-
-(define (starts-uppercase? str)
-      (regexp-match #rx"^[A-Z].*" str))
 
 (define (include-dependencies members)
    (define (include-type member)
@@ -102,4 +98,3 @@
    (if (empty? members)
       ""
       (string-append-immutable className "() = default;")))
-
