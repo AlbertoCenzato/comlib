@@ -11,7 +11,7 @@
   (let* ([lines (file->lines inputFileName)]
          [className (first lines)]
          [membersLines (rest lines)]
-         [members (map split-on-whitespace membersLines)]
+         [members (map parse-field-declaration membersLines)]
          [headerFileName (string-append-immutable className ".h")]
          [sourceFileName (string-append-immutable className ".cpp")]
          [headerOutputPath (build-path outputDir headerFileName)]

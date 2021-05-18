@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../i_message.h"
+@messageDependenciesHeaders
 
 namespace com::msg {
 
