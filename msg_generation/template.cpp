@@ -30,4 +30,8 @@ MessageType @|className|::type() {
   return reg.message_type_id;
 }
 
+uint8_t* serialize(const @|className|& msg, uint8_t* buffer) {
+  return msg.serialize(buffer);
+}
+
 }

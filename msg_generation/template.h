@@ -21,5 +21,7 @@ private:
   inline static DeserializationRegister<@|className|> reg{"@className"};	
 };
 
+uint8_t* serialize(const @|className|& msg, uint8_t* buffer);
+
 }
 
