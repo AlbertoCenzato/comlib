@@ -1,4 +1,4 @@
-#lang raket
+#lang racket
 
 (provide add-newline)
 (provide add-semicolon)
