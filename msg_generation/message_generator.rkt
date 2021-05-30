@@ -27,6 +27,9 @@
     (define (write-source-file out)
       (write-file out generate-source))
 
+    (when (regexp-match #rx"^[a-z].*" className)
+      (error (string-append-immutable "User defined type " className " must start with an uppercase character!")))
+
     (unless (directory-exists? outputDir)
       (make-directory outputDir))
     (call-with-output-file headerOutputPath write-header-file #:exists 'replace)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../i_message.h"
+#include "../serialization.h"
 @messageDependenciesHeaders
 
 namespace com::msg {
@@ -22,7 +23,15 @@ private:
   inline static DeserializationRegister<@|className|> reg{"@className"};	
 };
 
-uint8_t* serialize(const @|className|& msg, uint8_t* buffer);
-
 }
 
+
+namespace com {
+
+template <>
+uint8_t* serialize<msg::@|className|>(const msg::@|className|& msg, uint8_t* buffer);
+
+template <>
+const uint8_t* deserialize<msg::@|className|>(const uint8_t* buffer, msg::@|className|& msg);
+
+}

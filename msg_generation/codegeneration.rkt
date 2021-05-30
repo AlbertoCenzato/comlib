@@ -17,8 +17,29 @@
 
 (define (member->string member)
    (if (array? member)
-      (string-append-immutable "stdx::array<" (member-type member) "," (number->string (member-size member)) "> " (member-id member))
-      (string-append-immutable (member-type member) " " (member-id member))))
+      (~a "stdx::array<" (member-type member) "," (number->string (member-size member)) "> " (member-id member))
+      (~a (member-type member) " " (member-id member))))
+
+(define (non-native-type? member)
+   (starts-uppercase? (member-type member)))
+
+(define (native-type? member)
+   (not (non-native-type? member)))
+
+(define (sizeof-native-type member)
+   (if (member? member)
+      (~a "sizeof(" (member-id member) ")")
+      (~a "sizeof(" member ")")))
+
+(define (sizeof-user-type member)
+   (if (member? member)
+      (~a (member-id member) ".getSize()")
+      (~a member ".getSize()")))
+
+(define (sizeof member)
+   (if (native-type? member)
+      (sizeof-native-type member)
+      (sizeof-user-type member)))
 
 ; --------------- code generation functions -----------------
 
@@ -55,9 +76,7 @@
 
 (define (include-dependencies members)
    (define (include-type member)
-      (string-append-immutable "#include \"" (member-type member) ".h\"\n"))
-   (define (non-native-type? member)
-      (starts-uppercase? (member-type member)))
+      (~a "#include \"" (member-type member) ".h\"\n"))
    (map include-type (filter non-native-type? members)))
 
 (define (declare-members class-members)
@@ -70,31 +89,49 @@
 
 (define (generate-constructor-params-init members)
    (define (generate-member-initialization member)
-      (string-append-immutable (member-id member) "(" (member-id member) ")"))
+      (~a (member-id member) "(" (member-id member) ")"))
    (if (empty? members)
       ""
-      (string-append-immutable ": " (string-join (map generate-member-initialization members) ", "))))
+      (~a ": " (string-join (map generate-member-initialization members) ", "))))
 
 (define (generate-serialization members)
    (define (generate-field-serialization member)
-      (string-append-immutable "buffer = com::serialize(" (member-id member) ", buffer);\n"))
+      (~a "buffer = com::serialize(msg." (member-id member) ", buffer);\n"))
    (map generate-field-serialization members))
 
 (define (generate-deserialization members)
    (define (generate-field-deserialization member)
-      (string-append-immutable "data = com::deserialize(data, message->" (member-id member) ");\n"))
+      (~a "buffer = com::deserialize(buffer, msg." (member-id member) ");\n"))
    (map generate-field-deserialization members))
 
+(define (size-tmp-var member)
+   (~a (member-id member) "_size"))
+
+(define (generate-sizeof-array member)
+   (define sizeVar (size-tmp-var member))
+   (define sizeOfArrayElement (if (native-type? member) 
+                                 (sizeof-native-type "element")
+                                 (sizeof-user-type "element")))
+   (list (~a "uint32_t " sizeVar " = 0;\n")
+         (~a "for (const auto& element : " (member-id member) ")\n")
+         (~a "  " sizeVar " += " sizeOfArrayElement ";\n")))
+
+(define (generate-sizeof-scalar member)
+   (~a "uint32_t " (size-tmp-var member) " = " (sizeof member) ";\n"))
+
+(define (generate-sizeof-member member)
+   (if (array? member)
+      (generate-sizeof-array member)
+      (generate-sizeof-scalar member)))
+
+(define (generate-sum-of-sizes members)
+   (unless (empty? members)
+      (~a "size += " (string-join (map size-tmp-var members) " + ") ";\n")))
+
 (define (generate-sizeof members)
-   (define (sizeof member)
-      (if (array? member)
-         (string-append-immutable "static_cast<uint32_t>("(member-id member) ".size() * sizeof(" (member-type member) "))")
-         (string-append-immutable "sizeof(" (member-id member) ")")))
-   (if (empty? members)
-      "0"
-      (string-join (map sizeof members) " + "))) 
+   (append (map generate-sizeof-member members) (generate-sum-of-sizes members)))
 
 (define (generate-default-constructor className members)
    (if (empty? members)
       ""
-      (string-append-immutable className "() = default;")))
+      (~a className "() = default;")))
