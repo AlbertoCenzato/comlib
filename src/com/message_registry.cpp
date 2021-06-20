@@ -19,8 +19,7 @@ MessageType MessageRegistry::registerMessageDeserializationCallback(
   assert(next_available_empty_register < MAP_SIZE);
 
   const int index = getKeyValueIndex(message_type_name);
-  if (index >= 0)
-    throw HashCollisionException{message_type_name + "already registered"};
+  assert(index < 0 && "message_type_name already registered");  // TODO: provide a clearer error message
 
   const auto message_type_id = utils::hash<MessageType>(message_type_name);
   

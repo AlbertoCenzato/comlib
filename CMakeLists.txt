@@ -20,6 +20,7 @@ file (GLOB MSGS_HEADERS src/com/msg/*.h)
 
 if (ARDUINO)
 	message("Sto compilando per arduino") 
+	# TODO: clear directory before copy
 	file (COPY ${SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
 	file (COPY ${HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
 	file (COPY ${MSGS_SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME}/msg)
