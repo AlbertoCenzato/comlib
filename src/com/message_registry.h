@@ -1,7 +1,6 @@
 #pragma once
 
 #include "stdx.h"
-#include <cinttypes>
 
 using namespace com;
 
