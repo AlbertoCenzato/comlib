@@ -1,7 +1,6 @@
 #pragma once
 
 #include "message_registry.h"
-#include <cassert>
 
 namespace com {
 
