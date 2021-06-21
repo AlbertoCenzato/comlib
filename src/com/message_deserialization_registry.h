@@ -16,13 +16,13 @@ struct HashCollisionException {
   String message;
 };
 
-class MessageRegistry   // TODO: constexpr?
+class MessageDeserializationRegistry   // TODO: constexpr?
 {
 public:
 
   static const size_t MAP_SIZE = 256;
 
-  static MessageRegistry& getInstance();
+  static MessageDeserializationRegistry& getInstance();
 
   MessageType registerMessageDeserializationCallback(
     const String& message_type_id, 
@@ -39,12 +39,12 @@ private:
     MessageDeserializationCallback func;
   };
 
-  KeyValue deserialization_map[MAP_SIZE];
+  stdx::array<KeyValue, MAP_SIZE> deserialization_map;
   size_t next_available_empty_register;
 
-  MessageRegistry();
+  MessageDeserializationRegistry();
 
-  int getKeyValueIndex(const String& message_type_id) const;
+  const KeyValue* getKeyValuePair(const String& message_type_id) const;
 };
 
 }

@@ -5,7 +5,7 @@
 #include "serialization.h"
 #include "message_callback_registry.h"
 #include "i_message.h"
-#include "message_registry.h"
+#include "message_deserialization_registry.h"
 
 namespace com {
 
@@ -89,7 +89,7 @@ private:
       // It can happen if the underlying socket has dropped some bytes.
     }
 
-    auto& registry = msg::MessageRegistry::getInstance();
+    auto& registry = msg::MessageDeserializationRegistry::getInstance();
 
     const uint8_t* new_buffer_ptr;
     stdx::UPtr<msg::IMessage> message = registry.deserializeMessage(type, buffer, &new_buffer_ptr);

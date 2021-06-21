@@ -1,6 +1,6 @@
 #pragma once
 
-#include "message_registry.h"
+#include "message_deserialization_registry.h"
 
 namespace com::msg {
 
@@ -18,7 +18,7 @@ protected:
     MessageType message_type_id;
 
     DeserializationRegister(const String& class_name) {
-      auto& reg = MessageRegistry::getInstance();
+      auto& reg = MessageDeserializationRegistry::getInstance();
       message_type_id = reg.registerMessageDeserializationCallback(class_name, T::deserialize);
     }
   };

@@ -1,25 +1,25 @@
-#include "message_registry.h"
+#include "message_deserialization_registry.h"
 #include "i_message.h"
 
 namespace com::msg {
 
-MessageRegistry::MessageRegistry() : next_available_empty_register(0) {
-  memset(deserialization_map, 0, sizeof(deserialization_map));
+MessageDeserializationRegistry::MessageDeserializationRegistry() : next_available_empty_register(0) {
+  memset(deserialization_map.begin(), 0, sizeof(KeyValue)*deserialization_map.size());
 }
 
-MessageRegistry& MessageRegistry::getInstance() {
-  static MessageRegistry registry;
+MessageDeserializationRegistry& MessageDeserializationRegistry::getInstance() {
+  static MessageDeserializationRegistry registry;
   return registry;
 }
 
-MessageType MessageRegistry::registerMessageDeserializationCallback(
+MessageType MessageDeserializationRegistry::registerMessageDeserializationCallback(
   const String& message_type_name,
   MessageDeserializationCallback callback)
 {
   assert(next_available_empty_register < MAP_SIZE);
 
-  const int index = getKeyValueIndex(message_type_name);
-  assert(index < 0 && "message_type_name already registered");  // TODO: provide a clearer error message
+  const auto* pair = getKeyValuePair(message_type_name);
+  assert(pair && "message_type_name already registered");  // TODO: handle collisions
 
   const auto message_type_id = utils::hash<MessageType>(message_type_name);
   
@@ -30,7 +30,7 @@ MessageType MessageRegistry::registerMessageDeserializationCallback(
   return message_type_id;
 }
 
-stdx::UPtr<IMessage> MessageRegistry::deserializeMessage(
+stdx::UPtr<IMessage> MessageDeserializationRegistry::deserializeMessage(
   MessageType message_type_id, 
   const uint8_t* buffer, 
   const uint8_t** new_buffer_ptr) const 
@@ -47,12 +47,13 @@ stdx::UPtr<IMessage> MessageRegistry::deserializeMessage(
   return nullptr;
 }
 
-int MessageRegistry::getKeyValueIndex(const String& message_type_name) const {
+const MessageDeserializationRegistry::KeyValue*
+MessageDeserializationRegistry::getKeyValuePair(const String& message_type_name) const {
   const auto message_type_id = utils::hash<MessageType>(message_type_name);
   for (int i = 0; i < next_available_empty_register; ++i)
     if (deserialization_map[i].message_type_id == message_type_id)
-      return i;
-  return -1;
+      return &deserialization_map[i];
+  return nullptr;
 }
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "message_registry.h"
+#include "message_deserialization_registry.h"
 #include "stdx.h"
 
 namespace com {
