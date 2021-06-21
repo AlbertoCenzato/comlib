@@ -1,6 +1,7 @@
 #pragma once
 
 #include "message_registry.h"
+#include "stdx.h"
 
 namespace com {
 
@@ -11,18 +12,16 @@ public:
 
   void registerCallback(msg::MessageType type, Callback callback);
   void call(msg::MessageType type, const msg::IMessage& msg) const;
-  int getRegisterIndex(msg::MessageType type) const;
   bool isRegistered(msg::MessageType type) const;
   size_t registeredTypes() const;
 
 private:
   struct CallbackRegistry {
     msg::MessageType type = 0;
-    size_t registered_callbacks = 0;
-    Callback callbacks[64];
+    Callback callback;
   };
 
-  CallbackRegistry registry[256];
+  stdx::array<CallbackRegistry, 256> registry;
   size_t registered_types = 0;
 
   CallbackRegistry* getRegistry(msg::MessageType type);
