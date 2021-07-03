@@ -20,6 +20,9 @@
 #if ARDUINO_AVR_UNO
 #include <Arduino.h>
 
+#undef min
+#undef max
+
 constexpr int LED = 13;
 
 inline void blink(int ms) {
