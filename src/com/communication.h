@@ -9,28 +9,17 @@
 
 namespace com {
 
-struct Message;
-void swap(Message& a, Message& b);
-
 struct Message {
   msg::MessageType message_type_id;
   stdx::UPtr<msg::IMessage> message;
 
-  Message() : message_type_id(0), message() {}
-  Message(msg::MessageType message_type_id, stdx::UPtr<msg::IMessage>&& message)
-    : message_type_id(message_type_id), message(stdx::move(message)) {}
+  Message();
+  Message(msg::MessageType message_type_id, stdx::UPtr<msg::IMessage>&& message);
   Message(const Message& mess) = delete;
-  Message(Message&& mess) : Message() { swap(*this, mess); }
+  Message(Message&& mess);
 
-  Message& operator=(Message mess) { swap(*this, mess); return *this; }
+  Message& operator=(Message mess);
 };
-
-void swap(Message& a, Message& b) {
-  stdx::swap(a.message_type_id, b.message_type_id);
-  stdx::swap(a.message, b.message);
-}
-
-
 
 template <size_t BUFFER_SIZE=256>
 class MessageConveyor
