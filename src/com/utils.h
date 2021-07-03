@@ -66,7 +66,7 @@ struct Range {
   T min;
   T max;
 
-  constexpr Range(T min, T max) : min(min), max(max) { assert(min <= max); }
+  Range(T min, T max) : min(min), max(max) { assert(min <= max); }
 };
 
 template <class T>
