@@ -61,10 +61,17 @@ void profileTime(const char* name, void(*func)());
 void shiftBytesLeft(uint8_t* array, size_t length, size_t shift);
 void shiftBytesRight(uint8_t* array, size_t length, size_t shift);
 
+template <typename T>
+struct Range {
+  T min;
+  T max;
+
+  constexpr Range(T min, T max) : min(min), max(max) { assert(min <= max); }
+};
+
 template <class T>
-bool isInRange(const T& value, const T& min_inclusive, const T& max_inclusive) {
-  assert(min_inclusive <= max_inclusive);
-  return min_inclusive <= value && value <= max_inclusive;
+bool isInRange(const T& value, const Range<T>& range_inclusive) {
+  return range_inclusive.min <= value && value <= range_inclusive.max;
 }
 
 template <class T>
