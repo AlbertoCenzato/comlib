@@ -78,12 +78,6 @@ bool operator!=(const UPtr<T>& a, nullptr_t b) { return !(a == b); }
 
 
 template <class T>
-void swap(UPtr<T>& ptr1, UPtr<T>& ptr2) noexcept {
-  swap(ptr1.owned_ptr, ptr2.owned_ptr);
-}
-
-
-template <class T>
 class vector {
 public:
   vector() : length(0), data(nullptr) { }
@@ -131,14 +125,6 @@ private:
   size_t length;
   T* data;
 };
-
-/*
-template <class T>
-void swap(vector<T>& a, vector<T>& b) noexcept {
-  swap(a.length, b.length);
-  swap(a.data, b.data);
-}
-*/
 
 template <typename T, size_t N>
 class array {
