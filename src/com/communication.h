@@ -16,7 +16,7 @@ struct Message {
   Message();
   Message(msg::MessageType message_type_id, stdx::UPtr<msg::IMessage>&& message);
   Message(const Message& mess) = delete;
-  Message(Message&& mess);
+  Message(Message&& mess) noexcept;
 
   Message& operator=(Message mess);
 };

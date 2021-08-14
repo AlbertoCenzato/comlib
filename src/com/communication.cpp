@@ -17,7 +17,7 @@ namespace com {
   Message::Message(msg::MessageType message_type_id, stdx::UPtr<msg::IMessage>&& message)
     : message_type_id(message_type_id), message(stdx::move(message)) {}
 
-  Message::Message(Message&& mess) : Message() { 
+  Message::Message(Message&& mess) noexcept : Message() { 
     swap(*this, mess); 
   }
 
