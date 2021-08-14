@@ -23,8 +23,9 @@ if (ARDUINO)
 	# TODO: clear directory before copy
 	file (COPY ${SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
 	file (COPY ${HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
-	file (COPY ${MSGS_SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME}/msg)
-	file (COPY ${MSGS_HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME}/msg)
+	file (COPY ${MSGS_SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})  # NOTE: source file should be all in the same directory
+	file (COPY ${MSGS_HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME}/msg)  # NOTE: workaroud to make includes visible by all files
+	file (COPY ${MSGS_HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})	  # NOTE: workaroud to make includes visible by all files
 	return()
 endif (ARDUINO)
 
