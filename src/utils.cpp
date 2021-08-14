@@ -1,5 +1,5 @@
-#include "utils.h"
-#include "i_message.h"
+#include "com/utils.h"
+#include "com/i_message.h"
 
 #include <string.h>
 

@@ -1,5 +1,5 @@
-#include "stream_message_reader.h"
-#include "serialization.h"
+#include "com/stream_message_reader.h"
+#include "com/serialization.h"
 
 namespace com {
 

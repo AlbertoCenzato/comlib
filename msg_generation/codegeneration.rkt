@@ -76,7 +76,7 @@
 
 (define (include-dependencies members)
    (define (include-type member)
-      (~a "#include \"" (member-type member) ".h\"\n"))
+      (~a "#include \"com/msg/" (member-type member) ".h\"\n"))
    (map include-type (filter non-native-type? members)))
 
 (define (declare-members class-members)

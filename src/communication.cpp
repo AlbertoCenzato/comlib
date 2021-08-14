@@ -1,4 +1,4 @@
-#include "communication.h"
+#include "com/communication.h"
 
 namespace {
 

@@ -1,5 +1,5 @@
-#include "message_deserialization_registry.h"
-#include "i_message.h"
+#include "com/message_deserialization_registry.h"
+#include "com/i_message.h"
 
 namespace com::msg {
 

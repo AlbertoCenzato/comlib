@@ -4,19 +4,36 @@ project ("comlib")
 
 file (GLOB MSGS_GEN ${CMAKE_CURRENT_LIST_DIR}/msg/*.msg)
 
+set(TMP_MSG_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/msg/src)
+file(MAKE_DIRECTORY ${TMP_MSG_SRC_DIR})
 foreach(file ${MSGS_GEN})
 	message("Generating C++ code for ${file}")
-	execute_process(COMMAND racket ${CMAKE_CURRENT_LIST_DIR}/msg_generation/message_generator.rkt ${file} ${CMAKE_CURRENT_LIST_DIR}/src/com/msg
+	execute_process(COMMAND racket ${CMAKE_CURRENT_LIST_DIR}/msg_generation/message_generator.rkt ${file} ${TMP_MSG_SRC_DIR}
 					RESULT_VARIABLE result)
 	message(${result}) 
 endforeach()
 
+file (GLOB MSGS_SRC ${TMP_MSG_SRC_DIR}/*.cpp)
+file (GLOB MSGS_HEADERS ${TMP_MSG_SRC_DIR}/*.h)
 
-file (GLOB SRC src/com/*.cpp)  
-file (GLOB HEADERS src/com/*.h)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src/msg)
+foreach(file ${MSGS_SRC})
+	configure_file(${file} ${CMAKE_CURRENT_LIST_DIR}/src/msg)
+endforeach()
 
-file (GLOB MSGS_SRC src/com/msg/*.cpp)
-file (GLOB MSGS_HEADERS src/com/msg/*.h)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/com/msg)
+foreach(file ${MSGS_HEADERS})
+	configure_file(${file} ${CMAKE_CURRENT_LIST_DIR}/include/com/msg)
+endforeach()
+
+file(REMOVE_RECURSE ${TMP_MSG_SRC_DIR})
+
+
+file (GLOB SRC src/*.cpp)  
+file (GLOB HEADERS include/com/*.h)
+
+file (GLOB MSGS_SRC src/msg/*.cpp)
+file (GLOB MSGS_HEADERS include/com/msg/*.h)
 
 if (ARDUINO)
 	message("Sto compilando per arduino") 
@@ -34,7 +51,7 @@ add_library (comlib
 	${MSGS_SRC}
 )
 target_include_directories(comlib PUBLIC 
-	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 if (MSVC)

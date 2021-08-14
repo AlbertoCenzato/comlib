@@ -1,4 +1,4 @@
-#include "@|className|.h"
+#include "com/msg/@|className|.h"
 
 namespace com::msg {
 

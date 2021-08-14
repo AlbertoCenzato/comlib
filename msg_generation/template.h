@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../i_message.h"
-#include "../serialization.h"
+#include "com/i_message.h"
+#include "com/serialization.h"
 @messageDependenciesHeaders
 
 namespace com::msg {
