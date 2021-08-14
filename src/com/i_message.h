@@ -5,10 +5,11 @@
 namespace com::msg {
 
 struct IMessage {
+  virtual ~IMessage() = default;
   virtual uint32_t getSize() const = 0;
   virtual uint8_t* serialize(uint8_t* buffer) const = 0;
   virtual MessageType getMessageType() const = 0;
-
+  
   // every derived cla hould define a function ith thi ignature
   // static MessageType type();
 
