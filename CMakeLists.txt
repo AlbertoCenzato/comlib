@@ -38,11 +38,14 @@ file (GLOB MSGS_HEADERS include/com/msg/*.h)
 if (ARDUINO)
 	message("Sto compilando per arduino") 
 	# TODO: clear directory before copy
-	file (COPY ${SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
-	file (COPY ${HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
-	file (COPY ${MSGS_SRC} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})  # NOTE: source file should be all in the same directory
-	file (COPY ${MSGS_HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME}/msg)  # NOTE: workaroud to make includes visible by all files
-	file (COPY ${MSGS_HEADERS} DESTINATION ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})	  # NOTE: workaroud to make includes visible by all files
+	set(LIB_DIR ${ARDUINO_LIBS_PATH}/${PROJECT_NAME})
+	file(REMOVE_RECURSE ${LIB_DIR})
+	file(MAKE_DIRECTORY ${LIB_DIR})
+	file (COPY ${SRC} DESTINATION ${LIB_DIR})
+	file (COPY ${HEADERS} DESTINATION ${LIB_DIR}/com)
+	file (COPY ${LIB_DIR}/com/comlib.h DESTINATION ${LIB_DIR}) # NOTE: move comlib to toplevel dir
+	file (COPY ${MSGS_SRC} DESTINATION ${LIB_DIR})  # NOTE: source file should be all in the same directory
+	file (COPY ${MSGS_HEADERS} DESTINATION ${LIB_DIR}/com/msg)  # NOTE: workaroud to make includes visible by all files
 	return()
 endif (ARDUINO)
 

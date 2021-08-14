@@ -1,8 +1,8 @@
 #pragma once
 
-#include "macros.h"
-#include "communication.h"
-#include "communication_interface.h"
-#include "serialization.h"
-#include "stream_message_reader.h"
-#include "utils.h"
+#include "com/macros.h"
+#include "com/communication.h"
+#include "com/communication_interface.h"
+#include "com/serialization.h"
+#include "com/stream_message_reader.h"
+#include "com/utils.h"
