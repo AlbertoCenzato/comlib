@@ -19,12 +19,6 @@ T&& move(T& a) {
 
 
 template <class T>
-class UPtr;
-
-template <class T>
-void swap(UPtr<T>& a, UPtr<T>& b) noexcept;
-
-template <class T>
 class UPtr
 {
 public:
@@ -33,7 +27,7 @@ public:
   UPtr(nullptr_t ptr) : UPtr() {}
 
   UPtr(const UPtr<T>& ptr) = delete;
-  UPtr(UPtr<T>&& ptr) : UPtr<T>() {
+  UPtr(UPtr<T>&& ptr) noexcept : UPtr<T>() {
     swap(*this, ptr);
   }
 
@@ -50,7 +44,10 @@ public:
 
   operator bool() const { return owned_ptr; }
 
-  friend void swap<T>(UPtr<T>& ptr1, UPtr<T>& ptr2) noexcept;
+  friend void swap(UPtr<T>& ptr1, UPtr<T>& ptr2) noexcept {
+    using com::stdx::swap;
+    swap(ptr1.owned_ptr, ptr2.owned_ptr);
+  }
 
   T& operator*() { return *this->owned_ptr; }
   const T& operator*() const { return *this->owned_ptr; }
@@ -124,19 +121,24 @@ public:
   T* end() noexcept { return data + size(); }
   const T* end() const noexcept { return data + size(); }
 
-  friend void swap<T>(vector<T>& a, vector<T>& b) noexcept;
+  friend void swap(vector<T>& a, vector<T>& b) noexcept {
+    using com::stdx::swap;
+    swap(a.length, b.length);
+    swap(a.data, b.data);
+  }
 
 private:
   size_t length;
   T* data;
 };
 
+/*
 template <class T>
 void swap(vector<T>& a, vector<T>& b) noexcept {
   swap(a.length, b.length);
   swap(a.data, b.data);
 }
-
+*/
 
 template <typename T, size_t N>
 class array {

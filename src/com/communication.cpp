@@ -2,9 +2,10 @@
 
 namespace {
 
-  void swap(Message& a, Message& b) {
-    stdx::swap(a.message_type_id, b.message_type_id);
-    stdx::swap(a.message, b.message);
+  void swap(Message& a, Message& b) noexcept {
+    using com::stdx::swap;
+    swap(a.message_type_id, b.message_type_id);
+    swap(a.message, b.message);
   }
 
 }
