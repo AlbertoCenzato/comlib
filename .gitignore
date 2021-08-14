@@ -2,4 +2,5 @@
 out/
 CMakeSettings.json
 build/
-src/com/msg
+src/msg
+include/com/msg
