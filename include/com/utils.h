@@ -83,6 +83,11 @@ T hash(const String& str) {
   return hash;
 }
 
+template <class T>
+const T* asConst(T* t) {
+  return t;
+}
+
 }  // namespace utils
 
 }  // namespace com
