@@ -33,22 +33,22 @@ public:
    
   bool send(const msg::IMessage& message) {
     uint32_t message_length = sizeof(msg::MessageType) + message.getSize();
-    uint8_t* data_buffer = serialize(message_length, send_buffer);
+    uint8_t* data_buffer = serialize(message_length, send_buffer.begin());
     data_buffer = serialize(message.getMessageType(), data_buffer);
     data_buffer = message.serialize(data_buffer);
 
-    return socket->send(send_buffer, sizeof(message_length) + message_length);
+    return socket->send(send_buffer.begin(), sizeof(message_length) + message_length);
   }
 
   void processIncomingMessage() {
     // TODO(cenz): return ptr to actual message begin position in the buffer?
     // TODO(cenz): find a better name for this function
     bool is_complete_message = 
-      stream_reader.processIncomingBytes(*socket, receive_buffer, BUFFER_SIZE);
+      stream_reader.processIncomingBytes(*socket, receive_buffer.begin(), BUFFER_SIZE);
     if (!is_complete_message)
       return;
 
-    const uint8_t* message_begin = receive_buffer + sizeof(uint32_t);
+    const uint8_t* message_begin = receive_buffer.begin() + sizeof(uint32_t);
     Message message = bufferToMessage(message_begin);
 
     assert(message.message != nullptr);
@@ -61,9 +61,9 @@ public:
   }
 
 private:
-  uint8_t send_buffer[BUFFER_SIZE];
-  uint8_t receive_buffer[BUFFER_SIZE];
   MessageCallbackRegistry callback_registry;
+  stdx::array<uint8_t, BUFFER_SIZE> send_buffer;
+  stdx::array<uint8_t, BUFFER_SIZE> receive_buffer;
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
