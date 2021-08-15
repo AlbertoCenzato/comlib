@@ -20,7 +20,7 @@ class MessageDeserializationRegistry   // TODO: constexpr?
 {
 public:
 
-  static const size_t MAP_SIZE = 256;
+  static const uint32_t MAP_SIZE = 256;
 
   static MessageDeserializationRegistry& getInstance();
 
@@ -40,7 +40,7 @@ private:
   };
 
   stdx::array<KeyValue, MAP_SIZE> deserialization_map;
-  size_t next_available_empty_register;
+  uint32_t next_available_empty_register;
 
   MessageDeserializationRegistry();
 
