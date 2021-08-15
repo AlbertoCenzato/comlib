@@ -6,10 +6,10 @@
 
 
 (define (add-semicolon str)
-   (string-append-immutable str ";"))
+   (string-append str ";"))
 
 (define (add-newline str)
-   (string-append-immutable str "\n"))
+   (string-append str "\n"))
 
 (define (starts-uppercase? str)
       (regexp-match #rx"^[A-Z].*" str))

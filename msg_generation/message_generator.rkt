@@ -12,8 +12,8 @@
          [className (first lines)]
          [membersLines (rest lines)]
          [members (map parse-field-declaration membersLines)]
-         [headerFileName (string-append-immutable className ".h")]
-         [sourceFileName (string-append-immutable className ".cpp")]
+         [headerFileName (string-append className ".h")]
+         [sourceFileName (string-append className ".cpp")]
          [headerOutputPath (build-path outputDir headerFileName)]
          [sourceOutputPath (build-path outputDir sourceFileName)])
 
@@ -28,7 +28,7 @@
       (write-file out generate-source))
 
     (when (regexp-match #rx"^[a-z].*" className)
-      (error (string-append-immutable "User defined type " className " must start with an uppercase character!")))
+      (error (string-append "User defined type " className " must start with an uppercase character!")))
 
     (unless (directory-exists? outputDir)
       (make-directory outputDir))
