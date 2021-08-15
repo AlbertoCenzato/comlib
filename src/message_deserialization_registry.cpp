@@ -19,7 +19,7 @@ MessageType MessageDeserializationRegistry::registerMessageDeserializationCallba
   assert(next_available_empty_register < MAP_SIZE);
 
   const auto* pair = getKeyValuePair(message_type_name);
-  assert(pair && "message_type_name already registered");  // TODO: handle collisions
+  assert(!pair && "message_type_name already registered");  // TODO: handle collisions
 
   const auto message_type_id = utils::hash<MessageType>(message_type_name);
   
