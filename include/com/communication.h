@@ -21,10 +21,12 @@ struct Message {
   Message& operator=(Message mess);
 };
 
-template <size_t BUFFER_SIZE=256>
+template <uint32_t BUFFER_SIZE=256, uint32_t MESSAGE_TYPES=256>
 class MessageConveyor
 {
 public:
+  using MessageCallback = typename MessageCallbackRegistry<MESSAGE_TYPES>::Callback;
+
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
   ~MessageConveyor() = default;
 
@@ -56,14 +58,14 @@ public:
   }
 
   template <class Msg>
-  void registerCallback(MessageCallbackRegistry::Callback callback) {
+  void registerCallback(MessageCallback callback) {
     callback_registry.registerCallback(Msg::type(), callback);
   }
 
 private:
-  MessageCallbackRegistry callback_registry;
   stdx::array<uint8_t, BUFFER_SIZE> send_buffer;
   stdx::array<uint8_t, BUFFER_SIZE> receive_buffer;
+  MessageCallbackRegistry<MESSAGE_TYPES> callback_registry;
 
   IMessageSocket* socket;  
   StreamMessageReader stream_reader;
