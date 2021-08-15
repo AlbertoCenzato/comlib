@@ -111,9 +111,9 @@ void receive(com::test::ThreadsafeLoopbackSocket& socket) {
   com::MessageConveyor conveyor{ &socket };
   conveyor.connect();
     
-  conveyor.registerCallback<msg::Empty>(callbackEmpty);
-  conveyor.registerCallback<msg::Int32>(callbackInt32);
-  conveyor.registerCallback<msg::Move>(callbackMove);
+  conveyor.registerCallback<com::msg::Empty>(callbackEmpty);
+  conveyor.registerCallback<com::msg::Int32>(callbackInt32);
+  conveyor.registerCallback<com::msg::Move>(callbackMove);
 
   while (messages_received < (QUEUE_SIZE - 1)) {
     conveyor.processIncomingMessage();
