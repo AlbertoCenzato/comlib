@@ -18,6 +18,8 @@ T&& move(T& a) {
 }
 
 
+using nullptr_t = decltype(nullptr);
+
 template <class T>
 class UPtr
 {
