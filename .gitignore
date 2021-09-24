@@ -4,3 +4,4 @@ CMakeSettings.json
 build/
 src/msg
 include/com/msg
+src/com/msg
