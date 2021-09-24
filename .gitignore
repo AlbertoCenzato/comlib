@@ -5,3 +5,4 @@ build/
 src/msg
 include/com/msg
 src/com/msg
+CMakePresets.json
