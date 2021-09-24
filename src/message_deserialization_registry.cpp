@@ -51,7 +51,7 @@ stdx::UPtr<IMessage> MessageDeserializationRegistry::deserializeMessage(
 const MessageDeserializationRegistry::KeyValue*
 MessageDeserializationRegistry::getKeyValuePair(const String& message_type_name) const {
   const auto message_type_id = utils::hash<MessageType>(message_type_name);
-  for (int i = 0; i < next_available_empty_register; ++i)
+  for (uint32_t i = 0; i < next_available_empty_register; ++i)
     if (deserialization_map[i].message_type_id == message_type_id)
       return &deserialization_map[i];
   return nullptr;
