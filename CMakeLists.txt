@@ -3,6 +3,7 @@
 project ("comlib")
 
 include (cmake/generate_msgs.cmake)
+generate_message_code()
 
 file (GLOB SRC src/*.cpp)  
 file (GLOB HEADERS include/com/*.h)
