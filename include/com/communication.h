@@ -25,7 +25,7 @@ template <uint32_t BUFFER_SIZE=256, uint32_t MESSAGE_TYPES=256>
 class MessageConveyor
 {
 public:
-  using MessageCallback = typename MessageCallbackRegistry<MESSAGE_TYPES>::Callback;
+  using MessageCallback = void (*)(const ::com::msg::IMessage&);
 
   MessageConveyor(IMessageSocket* socket) : socket(socket) { }
   ~MessageConveyor() = default;
