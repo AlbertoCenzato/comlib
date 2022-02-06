@@ -1,5 +1,5 @@
 function (add_message msg_file)
-	set(MSGS_FILES "${MSGS_FILES};${msg_file}" CACHE INTERNAL "")
+	set (ADDITIONAL_MSGS_FILES "${ADDITIONAL_MSGS_FILES};${msg_file}" CACHE INTERNAL "")
 endfunction()
 
 function (generate_message_code)
@@ -7,8 +7,9 @@ function (generate_message_code)
 	message ("| Message code generation |")
 	message ("---------------------------")
 	
-	file (GLOB DEFAULT_MSGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/msg/*.msg)
-	set (MSGS_FILES "${DEFAULT_MSGS_FILES};${MSGS_FILES}" CACHE INTERNAL "")
+	file (GLOB MSGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/msg/*.msg)
+	list (APPEND MSGS_FILES ${ADDITIONAL_MSGS_FILES})
+	list (REMOVE_DUPLICATES MSGS_FILES)
 	message ("Generating messages from: ${MSGS_FILES}")
 	
 	set(TMP_MSG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/msg/src)
